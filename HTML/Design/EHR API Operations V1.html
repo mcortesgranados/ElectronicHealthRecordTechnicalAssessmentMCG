@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Operations List V1</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>API Operations List Version 1 (Outdated)</h2>
+
+    <table border="1">
+    <tr>
+        <th>#</th>
+        <th>Operation</th>
+        <th>Endpoint</th>
+        <th>Description</th>
+        <th>Architecture Applied (Justification)</th>
+        <th>Language Implemented</th>
+        <th>Requirement Number (Justification)</th>
+        <th>Compliance with Scalability, Backward Compatibility, Service Resiliency, Performance, and Security</th>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>Map Input Data to EHR Fields</td>
+        <td>POST /api/v1/mapping</td>
+        <td>Maps user input to the appropriate EHR fields dynamically.</td>
+        <td>Hexagonal Architecture: Keeps the business logic separate from external APIs, ensuring flexibility.</td>
+        <td>TypeScript (Node.js, NestJS)</td>
+        <td><p align="center">3.1.1</p>
+        <p>Allow internal team members to be able to make changes for mappings based on EHRs.</p></td>
+        <td>Ensures backward compatibility by maintaining a robust mapping layer. Supports scalability by allowing new EHRs to be added with minimal code changes. (4.1, 4.2)</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>Submit Patient Data to EHR</td>
+        <td>POST /api/v1/patient-data</td>
+        <td>Submits mapped patient data to the correct EHR system.</td>
+        <td>Microservices: Each EHR can have its own microservice to ensure modularity.</td>
+        <td>TypeScript (Node.js, NestJS)</td>
+        <td><div align="center">
+          <p>3.1.2</p>
+          <p>&nbsp;</p>
+        </div></td>
+        <td>Supports service resiliency with isolated microservices, ensuring that failures in one EHR do not affect others. Optimized for high throughput to handle large data volumes. (4.3, 4.4)</td>
+    </tr>
+    <tr>
+        <td>3</td>
+        <td>Retrieve EHR Mappings</td>
+        <td>GET /api/v1/mappings</td>
+        <td>Retrieves existing EHR field mappings for reference.</td>
+        <td>Clean Architecture: Ensures separation of concerns between data retrieval and business logic.</td>
+        <td>TypeScript (Node.js, NestJS)</td>
+        <td><div align="center">3.1.4</div></td>
+        <td>Designed for scalability and efficiency, ensuring quick retrievals while keeping mappings extensible. (4.1, 4.2)</td>
+    </tr>
+    <tr>
+        <td>4</td>
+        <td>Update EHR Mappings</td>
+        <td>PUT /api/v1/mappings</td>
+        <td>Allows internal teams to modify EHR mappings.</td>
+        <td>Event-Driven: Uses an event bus to notify EHR services of updates.</td>
+        <td>TypeScript (Node.js, NestJS)</td>
+        <td><div align="center">3.2.1</div></td>
+        <td>Ensures resiliency and backward compatibility by propagating changes asynchronously without affecting existing operations. (4.2, 4.3)</td>
+    </tr>
+    <tr>
+        <td>5</td>
+        <td>Validate Transactions</td>
+        <td>POST /api/v1/validate</td>
+        <td>Validates patient data before submission to EHR.</td>
+        <td>Hexagonal: Keeps validation logic separate from EHR-specific implementations.</td>
+        <td>TypeScript (Node.js, NestJS)</td>
+        <td><div align="center">3.1.2</div></td>
+        <td>Prevents invalid data from entering the system, improving reliability and maintaining data integrity. (4.3, 4.5)</td>
+    </tr>
+    <tr>
+        <td>6</td>
+        <td>Performance Monitoring</td>
+        <td>GET /api/v1/performance</td>
+        <td>Monitors system performance and load handling.</td>
+        <td>Microservices: Allows independent scaling of performance monitoring.</td>
+        <td>TypeScript (Node.js, NestJS)</td>
+        <td><div align="center">3.1.5</div></td>
+        <td>Provides real-time insights to optimize system performance and ensure uptime. (4.1, 4.4)</td>
+    </tr>
+    <tr>
+        <td>7</td>
+        <td>Multi-language Support</td>
+        <td>POST /api/v1/translate</td>
+        <td>Handles question translations for multiple languages.</td>
+        <td>Event-Driven: Translations are processed asynchronously to improve performance.</td>
+        <td>TypeScript (Node.js, NestJS)</td>
+        <td><div align="center">3.1.7, 3.2.4</div></td>
+        <td>Ensures global accessibility while maintaining scalability by processing translations asynchronously. (4.1)</td>
+    </tr>
+    <tr>
+        <td>8</td>
+        <td>Bulk Update Patient Data</td>
+        <td>POST /api/v1/bulk-update</td>
+        <td>Allows bulk updates for patient records in EHRs.</td>
+        <td>Microservices: Ensures batch processing efficiency with asynchronous handling.</td>
+        <td>TypeScript (Node.js, NestJS)</td>
+        <td><div align="center">3.2.5</div></td>
+        <td>Optimized for high throughput and efficient data handling to support large-scale updates. (4.1, 4.4)</td>
+    </tr>
+    <tr>
+        <td>9</td>
+        <td>System Scalability Plan</td>
+        <td>N/A</td>
+        <td>Plan for handling millions of concurrent users.</td>
+        <td>Event-Driven & Load Balancing: Uses message queues and horizontal scaling.</td>
+        <td>N/A (Architecture Plan)</td>
+        <td><div align="center">3.1.3</div></td>
+        <td>Designed to efficiently manage 10M+ concurrent users using scalable cloud-based infrastructure. (4.1)</td>
+    </tr>
+    <tr>
+        <td>10</td>
+        <td>Security & Data Encryption</td>
+        <td>N/A</td>
+        <td>Encryption, access control, and patient data protection.</td>
+        <td>Microservices & Secure API Gateway: Ensures strict authorization controls.</td>
+        <td>TypeScript (Node.js, NestJS)</td>
+        <td><div align="center">4.5</div></td>
+        <td>Implements encryption, authentication, and role-based access to secure patient data. (4.5)</td>
+    </tr>
+</table>
+
+</body>
+</html>

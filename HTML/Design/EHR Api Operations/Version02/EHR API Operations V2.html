@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>API Operations List V1</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+
+    <link href="../ESTILOS.css" rel="stylesheet" type="text/css" />
+    <link href="../../../ESTILOS.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<h1>API Operations List Version 2</h1>
+<table data-pm-slice="3 3 []">
+  <tbody>
+    <tr>
+      <th class="texto6Copy2"></th>
+      <th class="texto6Copy2">&nbsp;</th>
+      <th class="texto6Copy2">Operation</th>
+      <th class="texto6Copy2">Endpoint</th>
+      <th class="texto6Copy2">Description</th>
+      <th class="texto6Copy2">Architecture Applied</th>
+      <th class="texto6Copy2">Language Implemented</th>
+      <th class="texto6Copy2">Requirement Number(s)</th>
+      <th class="texto6Copy2">Compliance with Scalability, Backward Compatibility, Service Resiliency, Performance, and Security</th>
+      <th class="texto6Copy2">Detailed Justification of Architecture and Compliance</th>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td class="texto1_sin_borde">3.1.1. Implement a method within the API that can map input data received from users to the appropriate fields in the EHR systems. This method should be flexible to handle different types of input data and different EHR systems.</td>
+      <td class="texto2">Map input data to EHR fields</td>
+      <td><strong>POST</strong> /api/v1/mappings</td>
+      <td>Maps patient responses to the correct EHR fields based on the EHR system selected.</td>
+      <td>Hexagonal &amp; Clean Architecture</td>
+      <td>TypeScript (Node.js)</td>
+      <td><p>3.1.1</p>      </td>
+      <td>Scalability (4.1), Backward Compatibility (4.2), Performance (4.4)</td>
+      <td>Decouples business logic from API implementation, allows for future EHR integrations without changing core logic.</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td class="texto1_sin_borde">&nbsp;</td>
+      <td class="texto2">Validate and store patient responses</td>
+      <td><strong>POST</strong> /api/v1/patients</td>
+      <td>Ensures responses conform to expected schema, validates user identity, and persists them before transmission to the EHR.</td>
+      <td>Clean Architecture &amp; Microservices</td>
+      <td>TypeScript (Node.js)</td>
+      <td>3.1.2</td>
+      <td>Security (4.5), Performance (4.4)</td>
+      <td>Domain-driven structure isolates validation and storage, reducing tight coupling with EHR systems.</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td class="texto1_sin_borde">&nbsp;</td>
+      <td class="texto2">Transmit validated data to EHR</td>
+      <td><strong>POST</strong> /api/v1/ehr/transmit</td>
+      <td>Submits responses to the correct API endpoint of the selected EHR system.</td>
+      <td>Event-driven Architecture &amp; Microservices</td>
+      <td>TypeScript (Node.js)</td>
+      <td>3.1.2, 3.1.3</td>
+      <td>Scalability (4.1), Service Resiliency (4.3)</td>
+      <td>Asynchronous processing ensures fast response times and reliable delivery even if EHR APIs fail temporarily.</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td class="texto1_sin_borde">&nbsp;</td>
+      <td class="texto2">Retrieve EHR mappings</td>
+      <td><strong>GET</strong> /api/v1/mappings/{ehrName}</td>
+      <td>Fetches the current question-to-field mapping for a specified EHR system.</td>
+      <td>Hexagonal Architecture &amp; Microservices</td>
+      <td>TypeScript (Node.js)</td>
+      <td>3.1.5</td>
+      <td>Scalability (4.1), Backward Compatibility (4.2)</td>
+      <td>API ensures flexible storage and retrieval, enabling dynamic updates.</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td class="texto1_sin_borde">&nbsp;</td>
+      <td class="texto2">Update EHR mappings</td>
+      <td><strong>PUT</strong> /api/v1/mappings/{ehrName}</td>
+      <td>Allows internal users to update mappings dynamically.</td>
+      <td>Hexagonal Architecture &amp; Clean Architecture</td>
+      <td>TypeScript (Node.js)</td>
+      <td>3.1.5, 3.2.1</td>
+      <td>Backward Compatibility (4.2), Security (4.5)</td>
+      <td>Decoupled design ensures changes in mappings do not impact API core logic, enforcing access control.</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td class="texto1_sin_borde">&nbsp;</td>
+      <td class="texto2">Error handling &amp; exception logging</td>
+      <td><strong>POST</strong> /api/v1/errors</td>
+      <td>Captures API failures, logs errors, and triggers alerts for failed transactions.</td>
+      <td>Microservices &amp; Event-driven Architecture</td>
+      <td>TypeScript (Node.js)</td>
+      <td>3.1.2, 3.2.2</td>
+      <td>Service Resiliency (4.3), Security (4.5)</td>
+      <td>Centralized error handling ensures resilience and security, preventing leaks of sensitive patient data.</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td class="texto1_sin_borde">&nbsp;</td>
+      <td class="texto2">Implement performance measures</td>
+      <td><strong>GET</strong> /api/v1/performance/metrics</td>
+      <td>Provides insights on API response times, system load, and transaction failures.</td>
+      <td>Microservices &amp; Event-driven Architecture</td>
+      <td>TypeScript (Node.js)</td>
+      <td>3.1.6</td>
+      <td>Performance (4.4), Scalability (4.1)</td>
+      <td>Asynchronous logging and monitoring allow real-time performance tuning and efficient load balancing.</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td class="texto1_sin_borde">&nbsp;</td>
+      <td class="texto2">Plan scalability for user growth</td>
+      <td>N/A</td>
+      <td>Architectural documentation outlining strategies for horizontal scaling, caching, and load balancing.</td>
+      <td>Hexagonal Architecture &amp; Event-driven</td>
+      <td>Documentation</td>
+      <td>3.1.4</td>
+      <td>Scalability (4.1)</td>
+      <td>Ensures the system can handle 10M+ users by defining appropriate database partitioning and caching strategies.</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td class="texto1_sin_borde">&nbsp;</td>
+      <td class="texto2">Multi-language support</td>
+      <td><strong>GET</strong> /api/v1/localization/{lang}</td>
+      <td>Fetches localized questions and mappings for different languages.</td>
+      <td>Clean Architecture</td>
+      <td>TypeScript (Node.js)</td>
+      <td>3.1.8, 3.2.4</td>
+      <td>Scalability (4.1), Backward Compatibility (4.2)</td>
+      <td>Modular approach ensures easy addition of new languages without modifying existing business logic.</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td class="texto1_sin_borde">&nbsp;</td>
+      <td class="texto2">Bulk updates for hospitals</td>
+      <td><strong>POST</strong> /api/v1/patients/bulk-update</td>
+      <td>Allows bulk updates of patient data for a given provider or hospital.</td>
+      <td>Event-driven &amp; Microservices</td>
+      <td>TypeScript (Node.js)</td>
+      <td>3.2.5</td>
+      <td>Scalability (4.1), Service Resiliency (4.3)</td>
+      <td>Batch processing via event-driven architecture prevents system overload while ensuring high availability.</td>
+    </tr>
+    <tr>
+      <td>11</td>
+      <td class="texto1_sin_borde">&nbsp;</td>
+      <td class="texto2">Secure patient data storage</td>
+      <td><strong>POST</strong> /api/v1/security/encrypt</td>
+      <td>Encrypts and securely stores patient data before transmission.</td>
+      <td>Clean Architecture &amp; Security Best Practices</td>
+      <td>TypeScript (Node.js)</td>
+      <td>4.5</td>
+      <td>Security (4.5)</td>
+      <td>Ensures encryption in transit and at rest, mitigating risk of data breaches.</td>
+    </tr>
+    <tr>
+      <td>12</td>
+      <td class="texto1_sin_borde">&nbsp;</td>
+      <td class="texto2">API testing strategy</td>
+      <td>N/A</td>
+      <td>Defines automated testing for unit, integration, and load testing.</td>
+      <td>Microservices &amp; Clean Architecture</td>
+      <td>Jest (TypeScript)</td>
+      <td>3.1.7, 3.2.3</td>
+      <td>Backward Compatibility (4.2), Performance (4.4)</td>
+      <td>Ensures API remains stable across updates, supports backward compatibility, and maintains high performance.</td>
+    </tr>
+  </tbody>
+</table>
+<p>&nbsp;</p>
+</body>
+</html>
