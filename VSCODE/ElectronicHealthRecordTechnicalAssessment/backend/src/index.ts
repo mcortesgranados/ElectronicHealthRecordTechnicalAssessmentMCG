@@ -1,5 +1,8 @@
-import express from 'express';
-import auditLogRoutes from './api/routes/auditLogs';
+import dotenv from "dotenv";  // Load dotenv at the very top
+dotenv.config();  // Load environment variables from .env file
+
+import express from "express";
+import auditLogRoutes from "./api/routes/auditLogs";
 
 /**
  * @file server.ts
@@ -21,38 +24,20 @@ import auditLogRoutes from './api/routes/auditLogs';
 // Create an instance of an Express application
 const app = express();
 
-/**
- * Middleware to parse incoming JSON requests.
- * 
- * - Express provides `express.json()` to automatically parse incoming JSON payloads in request bodies.
- * - This middleware ensures that all API endpoints can process JSON requests.
- */
+// Middleware to parse incoming JSON requests.
 app.use(express.json());
 
-/**
- * @route /api
- * @description Mounts all audit log routes under the `/api` prefix.
- * 
- * - This integrates the `auditLogRoutes`, which defines all endpoints for handling audit logs.
- * - Using `/api` as the base route makes the API structure more **organized and versionable** (e.g., `/api/v1` in the future).
- */
-app.use('/api', auditLogRoutes);
+// Mount audit log routes under the `/api` prefix
+app.use("/api", auditLogRoutes);
 
-/**
- * Defines the port number for the Express server.
- * 
- * - The `PORT` is retrieved from environment variables (`process.env.PORT`), 
- *   allowing for configuration flexibility.
- * - If `PORT` is not set, it defaults to `3000`.
- */
+// Define the port number for the Express server
 const PORT = process.env.PORT || 3000;
 
-/**
- * Starts the Express server and listens for incoming HTTP requests.
- * 
- * - The server will listen on the specified `PORT`.
- * - The callback function logs a message to indicate that the server is running.
- */
+// Log environment variables (for debugging)
+console.log("Database Host:", process.env.DB_HOST);
+console.log("Database User:", process.env.DB_USER);
+
+// Start the Express server
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
