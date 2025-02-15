@@ -1,0 +1,58 @@
+import express from 'express';
+import auditLogRoutes from './api/routes/auditLogs';
+
+/**
+ * @file server.ts
+ * @description This is the main entry point of the application.
+ * 
+ * ### Role in Hexagonal Architecture:
+ * - This file is part of the **Infrastructure Layer**.
+ * - It sets up the **Express server**, configures middleware, and integrates the API routes.
+ * - It acts as the **primary adapter** that allows external clients (e.g., frontend, third-party services) 
+ *   to communicate with the application.
+ * - This file **should not contain business logic**; its role is to bootstrap the application 
+ *   and define global configurations.
+ * 
+ * ### Interaction with Other Layers:
+ * - **Client (External Systems) → Express Server (Infrastructure Layer) → API Router (Driving Adapter) → Controller (Application Layer) → Services (Domain Layer) → Repository (Data Layer)**
+ * - This architecture ensures that the **server remains decoupled from business logic**, making it **scalable and maintainable**.
+ */
+
+// Create an instance of an Express application
+const app = express();
+
+/**
+ * Middleware to parse incoming JSON requests.
+ * 
+ * - Express provides `express.json()` to automatically parse incoming JSON payloads in request bodies.
+ * - This middleware ensures that all API endpoints can process JSON requests.
+ */
+app.use(express.json());
+
+/**
+ * @route /api
+ * @description Mounts all audit log routes under the `/api` prefix.
+ * 
+ * - This integrates the `auditLogRoutes`, which defines all endpoints for handling audit logs.
+ * - Using `/api` as the base route makes the API structure more **organized and versionable** (e.g., `/api/v1` in the future).
+ */
+app.use('/api', auditLogRoutes);
+
+/**
+ * Defines the port number for the Express server.
+ * 
+ * - The `PORT` is retrieved from environment variables (`process.env.PORT`), 
+ *   allowing for configuration flexibility.
+ * - If `PORT` is not set, it defaults to `3000`.
+ */
+const PORT = process.env.PORT || 3000;
+
+/**
+ * Starts the Express server and listens for incoming HTTP requests.
+ * 
+ * - The server will listen on the specified `PORT`.
+ * - The callback function logs a message to indicate that the server is running.
+ */
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
