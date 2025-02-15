@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuditLog Controller Documentation</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+        pre { background: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, monospace; }
+        h2 { color: #333; }
+    </style>
+</head>
+<body>
+    <h1>AuditLog Controller Documentation</h1>
+    <p>This document provides the implementation details for the <code>AuditLogController</code>, which defines API endpoints for managing audit logs.</p>
+    
+    <h2>TypeScript Code</h2>
+    <pre><code>import { Request, Response } from 'express';
+import AuditLogService from '../services/AuditLogService';
+
+// Controller class to define API endpoints for AuditLog
+class AuditLogController {
+  
+  /**
+   * Handles the creation of a new audit log entry.
+   * @param req - Express request object containing log data in the body.
+   * @param res - Express response object.
+   */
+  async createLog(req: Request, res: Response) {
+    try {
+      const { user_id, ehr_mapping_id, action, changes } = req.body;
+      const log = await AuditLogService.createLog(user_id, ehr_mapping_id, action, changes);
+      return res.status(201).json(log);
+    } catch (error) {
+      return res.status(500).json({ message: 'Error creating audit log', error });
+    }
+  }
+
+  /**
+   * Retrieves all audit logs.
+   * @param req - Express request object.
+   * @param res - Express response object.
+   */
+  async getLogs(req: Request, res: Response) {
+    try {
+      const logs = await AuditLogService.getLogs();
+      return res.status(200).json(logs);
+    } catch (error) {
+      return res.status(500).json({ message: 'Error retrieving audit logs', error });
+    }
+  }
+
+  /**
+   * Retrieves a specific audit log entry by its ID.
+   * @param req - Express request object containing the log ID as a parameter.
+   * @param res - Express response object.
+   */
+  async getLogById(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const log = await AuditLogService.getLogById(id);
+      if (!log) return res.status(404).json({ message: 'Log not found' });
+      return res.status(200).json(log);
+    } catch (error) {
+      return res.status(500).json({ message: 'Error retrieving log', error });
+    }
+  }
+}
+
+export default new AuditLogController();
+</code></pre>
+    
+    <h2>Explanation of Methods</h2>
+    <ul>
+        <li><strong>createLog(req, res)</strong> - Accepts audit log data from the request body and creates a new log entry.</li>
+        <li><strong>getLogs(req, res)</strong> - Retrieves all stored audit logs.</li>
+        <li><strong>getLogById(req, res)</strong> - Fetches a specific audit log entry using its unique ID.</li>
+    </ul>
+
+    <h2>Key Features</h2>
+    <ul>
+        <li>The controller handles HTTP requests and responses.</li>
+        <li>It interacts with the <code>AuditLogService</code> for business logic execution.</li>
+        <li>Proper error handling is implemented to ensure robust API responses.</li>
+    </ul>
+</body>
+</html>

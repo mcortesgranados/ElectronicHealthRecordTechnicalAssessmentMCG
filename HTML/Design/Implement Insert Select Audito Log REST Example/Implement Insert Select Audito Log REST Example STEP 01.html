@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AuditLog Model Documentation</title>
+<style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+        pre { background: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, monospace; }
+        h2 { color: #333; }
+    </style>
+</head>
+<body>
+    <h1>1. Define the Database Model (src/infra/db/models/AuditLog.ts)</h1>
+    <p>This document provides the complete Sequelize model definition for the <code>audit_logs</code> table, with explanations for each field.</p>
+    
+    <h2>TypeScript Code</h2>
+    <pre><code>import { DataTypes, Model, Optional } from 'sequelize';
+import { sequelize } from '../config/database';
+
+// Interface defining the structure of the AuditLog table
+interface AuditLogAttributes {
+  id: string;  // Unique identifier for each audit log entry
+  user_id?: string;  // Optional user ID associated with the action
+  ehr_mapping_id?: string;  // Optional EHR mapping reference ID
+  action: string;  // The action performed (e.g., 'CREATE', 'UPDATE', 'DELETE')
+  changes?: object;  // Stores the changes made, if applicable
+  created_at?: Date;  // Timestamp of when the action occurred
+}
+
+// Interface for creating a new AuditLog entry (ID is optional)
+interface AuditLogCreationAttributes extends Optional {}
+
+// Sequelize model class for the AuditLog table
+class AuditLog extends Model implements AuditLogAttributes {
+  public id!: string;
+  public user_id?: string;
+  public ehr_mapping_id?: string;
+  public action!: string;
+  public changes?: object;
+  public created_at?: Date;
+}
+
+// Initialize the model
+AuditLog.init(
+  {
+    id: {
+      type: DataTypes.UUID, // Use UUID for unique identifiers
+      defaultValue: DataTypes.UUIDV4, // Auto-generate UUID
+      primaryKey: true, // Set as primary key
+    },
+    user_id: {
+      type: DataTypes.UUID,
+      allowNull: true, // Optional field
+    },
+    ehr_mapping_id: {
+      type: DataTypes.UUID,
+      allowNull: true, // Optional field
+    },
+    action: {
+      type: DataTypes.STRING,
+      allowNull: false, // Required field
+    },
+    changes: {
+      type: DataTypes.JSON, // JSON type to store change details
+      allowNull: true,
+    },
+    created_at: {
+      type: DataTypes.DATE, // Timestamp for logging
+      defaultValue: DataTypes.NOW, // Defaults to current time
+    },
+  },
+  {
+    sequelize, // Database connection instance
+    tableName: 'audit_logs', // Define table name explicitly
+    timestamps: false, // Disable automatic timestamp fields
+  }
+);
+
+export default AuditLog;
+</code></pre>
+    
+    <h2>Explanation of Fields</h2>
+    <ul>
+        <li><strong>id</strong>: A unique identifier (UUID) for each audit log entry.</li>
+        <li><strong>user_id</strong>: The ID of the user who performed the action (optional).</li>
+        <li><strong>ehr_mapping_id</strong>: Reference to an EHR mapping entry (optional).</li>
+        <li><strong>action</strong>: Describes the type of action performed (e.g., CREATE, UPDATE, DELETE).</li>
+        <li><strong>changes</strong>: Stores the details of the changes made, in JSON format.</li>
+        <li><strong>created_at</strong>: The timestamp when the log entry was created.</li>
+    </ul>
+
+    <h2>Configuration Notes</h2>
+    <ul>
+        <li>The <code>AuditLog</code> model is initialized with the <code>sequelize</code> connection.</li>
+        <li>The table name is explicitly set as <code>audit_logs</code>.</li>
+        <li>The model does not use Sequelize’s built-in timestamps (<code>timestamps: false</code>) since <code>created_at</code> is manually defined.</li>
+        <li>The <code>id</code> field uses UUIDs for unique identification.</li>
+    </ul>
+</body>
+</html>

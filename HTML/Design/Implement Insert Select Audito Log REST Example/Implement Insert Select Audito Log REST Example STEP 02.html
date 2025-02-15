@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AuditLog Repository Documentation</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+        pre { background: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, monospace; }
+        h2 { color: #333; }
+    </style>
+</head>
+<body>
+    <h1>2. Implement the Repository (src/api/repositories/AuditLogRepository.ts)</h1>
+    <p>This document provides the implementation details for the <code>AuditLogRepository</code>, which handles database operations related to audit logs.</p>
+    
+    <h2>TypeScript Code</h2>
+    <pre><code>import AuditLog from '../../infra/db/models/AuditLog';
+
+// Repository class to handle database operations for AuditLog
+class AuditLogRepository {
+  
+  /**
+   * Creates a new audit log entry in the database.
+   * @param logData - Partial data of an AuditLog entry.
+   * @returns The created AuditLog object.
+   */
+  async createLog(logData: Partial<AuditLog>): Promise<AuditLog> {
+    return await AuditLog.create(logData);
+  }
+
+  /**
+   * Retrieves all audit logs from the database.
+   * @returns An array of AuditLog objects.
+   */
+  async getLogs(): Promise {
+    return await AuditLog.findAll();
+  }
+
+  /**
+   * Fetches a specific audit log entry by its unique ID.
+   * @param id - The ID of the audit log entry.
+   * @returns The AuditLog object if found, otherwise null.
+   */
+  async getLogById(id: string): Promise<AuditLog | null> {
+    return await AuditLog.findByPk(id);
+  }
+}
+
+export default new AuditLogRepository();
+</code></pre>
+    
+    <h2>Explanation of Methods</h2>
+    <ul>
+        <li><strong>createLog(logData: Partial&lt;AuditLog&gt;): Promise&lt;AuditLog&gt;</strong> - Inserts a new audit log entry into the database.</li>
+        <li><strong>getLogs(): Promise&lt;AuditLog[]&gt;</strong> - Retrieves all audit log records from the database.</li>
+        <li><strong>getLogById(id: string): Promise&lt;AuditLog | null&gt;</strong> - Fetches a specific audit log entry by its unique identifier.</li>
+    </ul>
+
+    <h2>Key Features</h2>
+    <ul>
+        <li>The repository follows an abstraction pattern to interact with the <code>AuditLog</code> model.</li>
+        <li>All methods return <code>Promise</code> objects to handle asynchronous database queries.</li>
+        <li>The <code>findByPk</code> method is used to retrieve an entry by its primary key.</li>
+    </ul>
+</body>
+</html>

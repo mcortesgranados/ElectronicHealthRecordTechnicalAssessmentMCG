@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audit Log Routes Documentation</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+        pre { background: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, monospace; }
+        h2 { color: #333; }
+    </style>
+</head>
+<body>
+    <h1>Audit Log Routes Documentation</h1>
+    <p>This document provides details on the API endpoints for managing audit logs.</p>
+    
+    <h2>Audit Log Routes Implementation</h2>
+    <pre><code>import { Router } from 'express';
+import AuditLogController from '../controllers/AuditLogController';
+
+const router = Router();
+
+// Route to create a new audit log entry
+router.post('/audit-logs', AuditLogController.createLog);
+
+// Route to fetch all audit logs
+router.get('/audit-logs', AuditLogController.getLogs);
+
+// Route to fetch a specific audit log by ID
+router.get('/audit-logs/:id', AuditLogController.getLogById);
+
+export default router;
+</code></pre>
+    
+    <h2>API Endpoints</h2>
+    <ul>
+        <li><strong>POST /audit-logs</strong> - Creates a new audit log entry.</li>
+        <li><strong>GET /audit-logs</strong> - Retrieves all audit logs.</li>
+        <li><strong>GET /audit-logs/:id</strong> - Retrieves a specific audit log entry by ID.</li>
+    </ul>
+</body>
+</html>

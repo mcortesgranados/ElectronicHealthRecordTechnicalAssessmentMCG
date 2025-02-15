@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register Routes in index.ts</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+        pre { background: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, monospace; }
+        h2 { color: #333; }
+    </style>
+</head>
+<body>
+    <h1>Register Routes in index.ts</h1>
+    <p>This document provides details on how to register API routes in the main entry file of the application.</p>
+    
+    <h2>index.ts Implementation</h2>
+    <pre><code>import express from 'express';
+import auditLogRoutes from './api/routes/auditLogs';
+
+const app = express();
+
+// Middleware to parse JSON requests
+app.use(express.json());
+
+// Register audit log routes under /api
+app.use('/api', auditLogRoutes);
+
+// Define the server port
+const PORT = process.env.PORT || 3000;
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+</code></pre>
+    
+    <h2>API Setup</h2>
+    <ul>
+        <li><strong>Express Server:</strong> The application initializes an Express server.</li>
+        <li><strong>Middleware:</strong> Uses <code>express.json()</code> to parse JSON request bodies.</li>
+        <li><strong>Route Registration:</strong> The audit log routes are mounted under <code>/api</code>.</li>
+        <li><strong>Server Listening:</strong> The server listens on port 3000 or a custom environment-defined port.</li>
+    </ul>
+</body>
+</html>

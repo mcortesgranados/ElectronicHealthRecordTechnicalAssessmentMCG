@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+</head>
+
+<body>
+<p>Backend Folder Structure (NestJS / Express)</p>
+<p>&nbsp;</p>
+<p>backend/<br />
+  │── src/<br />
+  │   ├── api/<br />
+  │   │   ├── controllers/      # API Controllers (Handle Requests)<br />
+  │   │   ├── services/         # Business Logic (Use Cases)<br />
+  │   │   ├── repositories/     # Data Access Layer (EHR, Patients)<br />
+  │   │   ├── dtos/             # Data Transfer Objects (Validation)<br />
+  │   │   ├── middlewares/      # Authentication, Logging<br />
+  │   │   ├── utils/            # Helper functions, Encryption<br />
+  │   │   ├── config/           # App Configurations<br />
+  │   │   ├── tests/            # Unit &amp; Integration Tests<br />
+  │   ├── infra/<br />
+  │   │   ├── db/               # Database Models, Migrations<br />
+  │   │   ├── kafka/            # Event-Based Communication<br />
+  │   │   ├── redis/            # Caching Services<br />
+  │   │   ├── security/         # Encryption, Token Handling<br />
+  │   ├── index.ts              # App Entry Point<br />
+  │── tests/<br />
+  │   ├── integration/          # API Integration Tests<br />
+  │   ├── unit/                 # Unit Tests<br />
+  │── .env                      # Environment Variables<br />
+  │── package.json              # Dependencies<br />
+  │── tsconfig.json             # TypeScript Config<br />
+  │── Dockerfile                # Containerization<br />
+</p>
+<p>&nbsp;</p>
+<h2 data-start="167" data-end="212"><strong data-start="170" data-end="212">Backend Folder Architecture Mapping</strong></h2>
+<table data-start="213" data-end="2803">
+  <thead data-start="213" data-end="295">
+    <tr data-start="213" data-end="295">
+      <th data-start="213" data-end="233"><strong data-start="215" data-end="225">Folder</strong></th>
+      <th data-start="233" data-end="274"><strong data-start="235" data-end="262">Applied Architecture(s)</strong></th>
+      <th data-start="274" data-end="295"><strong data-start="276" data-end="293">Justification</strong></th>
+    </tr>
+  </thead>
+  <tbody data-start="411" data-end="2803">
+    <tr data-start="411" data-end="602">
+      <td>controllers/</td>
+      <td><strong data-start="433" data-end="459">Hexagonal Architecture</strong> (Adapters)</td>
+      <td>Controllers act as <strong data-start="493" data-end="509">entry points</strong> for handling HTTP requests and map them to services, following <strong data-start="573" data-end="599">separation of concerns</strong>.</td>
+    </tr>
+    <tr data-start="603" data-end="782">
+      <td>services/</td>
+      <td><strong data-start="625" data-end="658">Hexagonal, Clean Architecture</strong> (Application Layer)</td>
+      <td>This layer contains <strong data-start="701" data-end="719">business logic</strong>, making the system <strong data-start="739" data-end="779">flexible, maintainable, and testable</strong>.</td>
+    </tr>
+    <tr data-start="783" data-end="988">
+      <td>repositories/</td>
+      <td><strong data-start="805" data-end="838">Hexagonal, Clean Architecture</strong> (Persistence Layer)</td>
+      <td>Handles <strong data-start="869" data-end="889">data persistence</strong> and communication with EHR systems or databases, <strong data-start="939" data-end="965">decoupling data access</strong> from business logic.</td>
+    </tr>
+    <tr data-start="989" data-end="1170">
+      <td>dtos/</td>
+      <td><strong data-start="1011" data-end="1033">Clean Architecture</strong> (Data Layer)</td>
+      <td><strong data-start="1050" data-end="1082">Data Transfer Objects (DTOs)</strong> ensure <strong data-start="1090" data-end="1118">structured and validated</strong> data between layers, preventing invalid requests.</td>
+    </tr>
+    <tr data-start="1171" data-end="1328">
+      <td>middlewares/</td>
+      <td><strong data-start="1193" data-end="1220">Microservices, Security</strong></td>
+      <td>Middleware <strong data-start="1240" data-end="1299">centralizes authentication, logging, and error handling</strong>, improving <strong data-start="1311" data-end="1325">modularity</strong>.</td>
+    </tr>
+    <tr data-start="1329" data-end="1506">
+      <td>utils/</td>
+      <td><strong data-start="1351" data-end="1373">Clean Architecture</strong> (Helper Layer)</td>
+      <td>Contains <strong data-start="1400" data-end="1420">helper functions</strong> (formatting, encryption) to <strong data-start="1449" data-end="1475">avoid code duplication</strong> and <strong data-start="1480" data-end="1503">enhance reusability</strong>.</td>
+    </tr>
+    <tr data-start="1507" data-end="1666">
+      <td>config/</td>
+      <td><strong data-start="1529" data-end="1566">Microservices, Clean Architecture</strong></td>
+      <td>Stores <strong data-start="1576" data-end="1621">environment variables and global settings</strong>, <strong data-start="1623" data-end="1663">simplifying configuration management</strong>.</td>
+    </tr>
+    <tr data-start="1667" data-end="1848">
+      <td>infra/db/</td>
+      <td><strong data-start="1689" data-end="1722">Hexagonal, Clean Architecture</strong> (Persistence Layer)</td>
+      <td>Manages <strong data-start="1753" data-end="1802">database connections, schemas, and migrations</strong>, ensuring a <strong data-start="1815" data-end="1845">loosely coupled data layer</strong>.</td>
+    </tr>
+    <tr data-start="1849" data-end="1996">
+      <td>infra/kafka/</td>
+      <td><strong data-start="1871" data-end="1901">Event-Based, Microservices</strong></td>
+      <td>Implements <strong data-start="1918" data-end="1948">asynchronous communication</strong> for event-driven operations between services.</td>
+    </tr>
+    <tr data-start="1997" data-end="2152">
+      <td>infra/redis/</td>
+      <td><strong data-start="2019" data-end="2062">Microservices, Performance Optimization</strong></td>
+      <td>Implements <strong data-start="2076" data-end="2087">caching</strong> to reduce <strong data-start="2098" data-end="2115">database load</strong>, improving system <strong data-start="2134" data-end="2149">performance</strong>.</td>
+    </tr>
+    <tr data-start="2153" data-end="2297">
+      <td>infra/security/</td>
+      <td><strong data-start="2175" data-end="2207">Security, Clean Architecture</strong></td>
+      <td>Manages <strong data-start="2219" data-end="2266">encryption, hashing, and JWT authentication</strong>, enforcing <strong data-start="2278" data-end="2294">data privacy</strong>.</td>
+    </tr>
+    <tr data-start="2298" data-end="2450">
+      <td>tests/unit/</td>
+      <td><strong data-start="2320" data-end="2360">Clean Architecture, Testing Strategy</strong></td>
+      <td>Contains <strong data-start="2372" data-end="2386">unit tests</strong> to validate business logic and <strong data-start="2418" data-end="2447">ensure high test coverage</strong>.</td>
+    </tr>
+    <tr data-start="2451" data-end="2627">
+      <td>tests/integration/</td>
+      <td><strong data-start="2476" data-end="2507">Hexagonal, Testing Strategy</strong></td>
+      <td><strong data-start="2510" data-end="2532">Tests interactions</strong> between different modules, ensuring <strong data-start="2569" data-end="2591">proper integration</strong> with databases and external APIs.</td>
+    </tr>
+    <tr data-start="2628" data-end="2803">
+      <td>index.ts</td>
+      <td><strong data-start="2650" data-end="2687">Microservices, Clean Architecture</strong></td>
+      <td><strong data-start="2690" data-end="2705">Entry point</strong> for the backend application, <strong data-start="2735" data-end="2771">bootstraps all necessary modules</strong> while keeping them decoupled.</td>
+    </tr>
+  </tbody>
+</table>
+<p>&nbsp;</p>
+<h2 data-start="2810" data-end="2856"><strong data-start="2813" data-end="2856">🔹 Summary of Architectural Application</strong></h2>
+<p data-start="2857" data-end="3339">✅ <strong data-start="2859" data-end="2885">Hexagonal Architecture</strong> → Used for modularity and separation of concerns.<br data-start="2935" data-end="2938" />
+  ✅ <strong data-start="2940" data-end="2962">Clean Architecture</strong> → Ensures <strong data-start="2973" data-end="2992">maintainability</strong>, <strong data-start="2994" data-end="3009">testability</strong>, and <strong data-start="3015" data-end="3030">scalability</strong>.<br data-start="3031" data-end="3034" />
+  ✅ <strong data-start="3036" data-end="3066">Microservices Architecture</strong> → Supports <strong data-start="3078" data-end="3110">distributed EHR integrations</strong> with event-driven design.<br data-start="3136" data-end="3139" />
+  ✅ <strong data-start="3141" data-end="3169">Event-Based Architecture</strong> → Kafka allows <strong data-start="3185" data-end="3212">asynchronous processing</strong> of patient data updates.<br data-start="3237" data-end="3240" />
+  ✅ <strong data-start="3242" data-end="3269">Security Best Practices</strong> → Implements <strong data-start="3283" data-end="3336">data encryption, authentication, and API security</strong>.</p>
+<p>&nbsp;</p>
+<p>&nbsp; </p>
+</body>
+</html>

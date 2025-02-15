@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Run the API</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+        pre { background: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; }
+        code { font-family: Consolas, monospace; }
+        h2 { color: #333; }
+    </style>
+</head>
+<body>
+    <h1>9. Run the API</h1>
+    <p>After implementing all necessary files, follow these steps to install dependencies and run the API.</p>
+    
+    <h2>Install Dependencies</h2>
+    <pre><code>npm install express sequelize mysql2 dotenv</code></pre>
+    
+    <h2>Start the Server</h2>
+    <pre><code>npm run dev</code></pre>
+    
+    <h2>Testing the API</h2>
+    <p>Use Postman or cURL to test API endpoints.</p>
+    
+    <h3>Insert a Log</h3>
+    <pre><code>curl -X POST http://localhost:3000/api/audit-logs \
+     -H "Content-Type: application/json" \
+     -d '{
+           "user_id": "some-user-id",
+           "ehr_mapping_id": "some-mapping-id",
+           "action": "Update Record",
+           "changes": { "field": "old_value -> new_value" }
+         }'</code></pre>
+    
+    <h3>Get All Logs</h3>
+    <pre><code>curl -X GET http://localhost:3000/api/audit-logs</code></pre>
+    
+    <h3>Get a Log by ID</h3>
+    <pre><code>curl -X GET http://localhost:3000/api/audit-logs/{id}</code></pre>
+</body>
+</html>
+
+</head>
+
+<body>
+</body>
+</html>
