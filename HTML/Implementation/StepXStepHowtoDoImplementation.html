@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeScript REST API - Hexagonal Architecture</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+        pre { background: #f4f4f4; padding: 10px; border-radius: 5px; }
+        code { font-family: monospace; }
+        h1, h2, h3 { color: #333; }
+    </style>
+</head>
+<body>
+    <h1>TypeScript REST API - Hexagonal Architecture</h1>
+    
+    <h2>Step 1: Initialize the Project</h2>
+    <pre><code>mkdir ts-hexagonal-api
+cd ts-hexagonal-api
+npm init -y</code></pre>
+
+    <h2>Step 2: Install Dependencies</h2>
+    <h3>Core Dependencies</h3>
+    <pre><code>npm install express cors dotenv typeorm reflect-metadata mysql2</code></pre>
+    
+    <h3>Development Dependencies</h3>
+    <pre><code>npm install --save-dev typescript ts-node nodemon jest ts-jest @types/jest @types/node @types/express</code></pre>
+    
+    <h2>Step 3: Configure TypeScript</h2>
+    <pre><code>npx tsc --init</code></pre>
+    <p>Edit <code>tsconfig.json</code> with the following settings:</p>
+    <pre><code>{
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "CommonJS",
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  }
+}</code></pre>
+    
+    <h2>Step 4: Project Structure</h2>
+    <pre><code>ts-hexagonal-api/
+│── src/
+│   ├── application/        # Business Logic (Use Cases)
+│   ├── domain/             # Entities & Interfaces
+│   ├── infrastructure/     # Adapters (DB, API, Controllers)
+│   ├── config/             # Configurations (DB, ENV)
+│   ├── server.ts           # Entry Point
+│── tests/                  # Unit and Integration Tests
+│── package.json
+│── tsconfig.json
+│── .env</code></pre>
+    
+    <h2>Step 5: Define the Patient Entity</h2>
+    <pre><code>export class Patient {
+  constructor(
+    public id: number,
+    public name: string,
+    public gender: "Male" | "Female" | "Other",
+    public dob: Date,
+    public address?: string,
+    public phone?: string,
+    public email?: string,
+    public emergencyContact?: string,
+    public insuranceProvider?: string,
+    public insurancePolicyNumber?: string,
+    public primaryCarePhysician?: string,
+    public allergies?: string,
+    public currentMedications?: string,
+    public medicalHistory?: string,
+    public socialHistory?: string,
+    public familyHistory?: string,
+    public ehrName: string,
+    public createdAt?: Date,
+    public updatedAt?: Date
+  ) {}
+}</code></pre>
+
+    <h2>Step 6: Define the Patient Repository Interface</h2>
+    <pre><code>import { Patient } from "../entities/Patient";
+
+export interface PatientRepository {
+  save(patient: Patient): Promise<Patient>;
+  findById(id: number): Promise<Patient | null>;
+  findAll(): Promise<Patient[]>;
+  update(id: number, patient: Partial<Patient>): Promise<Patient | null>;
+  delete(id: number): Promise<void>;
+}</code></pre>
+
+    <h2>Step 7: Implement the Repository with TypeORM</h2>
+    <pre><code>import { Repository, EntityRepository, DataSource } from "typeorm";
+import { PatientEntity } from "../entities/PatientEntity";
+import { Patient } from "../../domain/entities/Patient";
+import { PatientRepository } from "../../domain/repositories/PatientRepository";
+
+export class PatientRepositoryImpl implements PatientRepository {
+  private repository: Repository<PatientEntity>;
+  constructor(dataSource: DataSource) {
+    this.repository = dataSource.getRepository(PatientEntity);
+  }
+
+  async save(patient: Patient): Promise<Patient> {
+    return await this.repository.save(patient);
+  }
+
+  async findById(id: number): Promise<Patient | null> {
+    return await this.repository.findOneBy({ id });
+  }
+
+  async findAll(): Promise<Patient[]> {
+    return await this.repository.find();
+  }
+
+  async update(id: number, patient: Partial<Patient>): Promise<Patient | null> {
+    await this.repository.update(id, patient);
+    return await this.findById(id);
+  }
+
+  async delete(id: number): Promise<void> {
+    await this.repository.delete(id);
+  }
+}</code></pre>
+
+    <h2>Step 8: Implement Patient Use Case</h2>
+    <pre><code>import { PatientRepository } from "../domain/repositories/PatientRepository";
+import { Patient } from "../domain/entities/Patient";
+
+export class PatientService {
+  constructor(private patientRepository: PatientRepository) {}
+  async createPatient(patient: Patient): Promise<Patient> {
+    return this.patientRepository.save(patient);
+  }
+  async getPatient(id: number): Promise<Patient | null> {
+    return this.patientRepository.findById(id);
+  }
+  async getAllPatients(): Promise<Patient[]> {
+    return this.patientRepository.findAll();
+  }
+  async updatePatient(id: number, data: Partial<Patient>): Promise<Patient | null> {
+    return this.patientRepository.update(id, data);
+  }
+  async deletePatient(id: number): Promise<void> {
+    return this.patientRepository.delete(id);
+  }
+}</code></pre>
+
+    <h2>Step 9: Setup Express Server</h2>
+    <pre><code>import express from "express";
+import cors from "cors";
+import { PatientController } from "./infrastructure/controllers/PatientController";
+import { PatientService } from "./application/PatientService";
+import { PatientRepositoryImpl } from "./infrastructure/persistence/PatientRepositoryImpl";
+import { dataSource } from "./config/database";
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+const patientRepository = new PatientRepositoryImpl(dataSource);
+const patientService = new PatientService(patientRepository);
+const patientController = new PatientController(patientService);
+
+app.post("/patients", patientController.createPatient.bind(patientController));
+app.get("/patients/:id", patientController.getPatient.bind(patientController));
+app.get("/patients", patientController.getAllPatients.bind(patientController));
+app.put("/patients/:id", patientController.updatePatient.bind(patientController));
+app.delete("/patients/:id", patientController.deletePatient.bind(patientController));
+
+app.listen(3000, () => console.log("Server running on port 3000"));</code></pre>
+</body>
+</html>
