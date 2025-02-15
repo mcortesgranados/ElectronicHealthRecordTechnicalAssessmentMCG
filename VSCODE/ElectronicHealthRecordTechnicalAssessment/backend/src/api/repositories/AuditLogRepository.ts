@@ -47,7 +47,7 @@ class AuditLogRepository {
    * 
    * @returns {Promise<AuditLog[]>} An array of audit logs.
    * 
-   * Example:
+   * Example:   
    * ```typescript
    * const logs = await AuditLogRepository.getLogs();
    * console.log(logs);
