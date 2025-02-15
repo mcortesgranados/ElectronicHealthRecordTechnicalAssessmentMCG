@@ -1,0 +1,64 @@
+AuditLog Step 8. Initialize Sequelize in src/infra/db/config/database.ts
+
+
+🗄️ chore: Initialize and configure Sequelize database connection
+
+Changes:
+- 🔌 Established database connection using Sequelize.
+- 🔐 Configured secure environment variable handling.
+- ⚡ Optimized logging by disabling SQL query output.
+- 🔄 Implemented automatic model synchronization with `.sync()`.
+
+✅ Database connection is now set up and ready for use.
+
+
+
+import { Sequelize } from 'sequelize';
+
+/**
+ * @file database.ts
+ * @description This file initializes and configures the database connection using Sequelize ORM.
+ * 
+ * ### Role in Hexagonal Architecture:
+ * - This file is part of the **Infrastructure Layer**.
+ * - It acts as a **driven adapter**, providing a database connection to the repository layer.
+ * - It ensures that business logic remains **decoupled from the database**, making the system 
+ *   more maintainable, testable, and scalable.
+ * 
+ * ### Interaction with Other Layers:
+ * - **Repositories (Data Access Layer) → Infrastructure Layer (Sequelize ORM) → MySQL Database**
+ * - The repositories interact with this **Sequelize instance** to execute queries in an 
+ *   **abstracted manner**, rather than dealing directly with raw SQL.
+ * - This allows for an easy **database switch** (e.g., from MySQL to PostgreSQL) with minimal changes.
+ */
+
+/**
+ * Initializes a new Sequelize instance for connecting to a MySQL database.
+ * 
+ * - Uses environment variables (`process.env.*`) to configure dynamic connection settings.
+ * - Ensures **security** by not hardcoding credentials.
+ * - The `dialect` is set to `mysql`, making Sequelize compatible with a MySQL database.
+ * - `logging: false` disables SQL query logging to keep the console clean.
+ */
+export const sequelize = new Sequelize(
+  process.env.DB_NAME as string,       // Database name
+  process.env.DB_USER as string,       // Database username
+  process.env.DB_PASSWORD as string,   // Database password
+  {
+    host: process.env.DB_HOST,         // Database host (e.g., localhost, cloud instance)
+    dialect: 'mysql',                  // Specifies the SQL dialect to be used
+    port: Number(process.env.DB_PORT),  // Database port (converted to number)
+    logging: false,                     // Disables SQL query logging in the console
+  }
+);
+
+/**
+ * Synchronizes Sequelize models with the database.
+ * 
+ * - `.sync()` ensures that all defined models are mapped to database tables.
+ * - This operation runs at application startup, ensuring that the database is available.
+ * - If an error occurs, it will be logged to the console.
+ */
+sequelize.sync()
+  .then(() => console.log('Database connected'))  // Logs success message
+  .catch((err) => console.error('Database connection error:', err)); // Logs error if connection fails

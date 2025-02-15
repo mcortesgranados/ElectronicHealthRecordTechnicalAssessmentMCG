@@ -1,6 +1,5 @@
-1. Define the Database Model (src/infra/db/models/AuditLog.ts)
+AuditLog Step 1. Define the Database Model (src/infra/db/models/AuditLog.ts)
 
-Commit Message:
 🚀 Add AuditLog Model with Documentation and Hexagonal Architecture Integration
 
 Details:
