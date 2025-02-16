@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hexagonal Architecture Explained for Project Structure</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3 {
+            color: #2e3a59;
+        }
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #555;
+        }
+        ul {
+            margin-top: 10px;
+        }
+        code {
+            background-color: #f4f4f4;
+            padding: 5px;
+            border-radius: 3px;
+        }
+        .folder {
+            margin-left: 20px;
+        }
+        .highlight {
+            background-color: #eaf7fb;
+            padding: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Hexagonal Architecture: Detailed Explanation of Project Structure</h1>
+    
+    <p>In the context of Hexagonal Architecture (also known as Ports and Adapters), the core idea is to separate the application into distinct layers that have clear responsibilities. Here's an in-depth explanation of each part of your project structure, and how it fits within this architectural pattern.</p>
+    
+    <h2>Project Folder Structure</h2>
+    <pre>
+    backend/
+    │── src/
+    │ ├── api/                    # Adapter layer (API Interface)
+    │ │ ├── controllers/          # Incoming HTTP requests (API Adapters)
+    │ │ ├── services/             # Business logic layer (Application Use Cases)
+    │ │ ├── dtos/                 # Data Transfer Objects (DTOs for validation)
+    │ │ ├── middlewares/          # Authentication, Logging (API Adapters)
+    │ │ ├── utils/                # Helper functions (Utilities)
+    │ ├── domain/                 # Core business logic
+    │ │ ├── entities/             # Core domain entities (e.g., Patient)
+    │ │ ├── ports/                # Core interfaces (e.g., Repository Port)
+    │ │ ├── services/             # Core services (Business rules)
+    │ ├── infrastructure/         # Adapters to external systems (Database, Kafka, etc.)
+    │ │ ├── db/                   # Database Models, Repositories (Adapters)
+    │ │ ├── kafka/                # Event-Based Communication (Adapters)
+    │ │ ├── redis/                # Caching Services (Adapters)
+    │ │ ├── security/             # Encryption, Token Handling (Adapters)
+    │ ├── index.ts                # Application Entry Point
+    │── tests/                     # Test folder
+    │ ├── integration/            # Integration Tests (Adapters with external systems)
+    │ ├── unit/                   # Unit Tests (Core business logic)
+    │── .env                       # Environment Variables
+    │── package.json               # Dependencies
+    │── tsconfig.json              # TypeScript Config
+    │── Dockerfile                 # Containerization
+    </pre>
+    
+    <h2>Folder Roles in Hexagonal Architecture</h2>
+
+    <h3>1. <span class="highlight">api/</span> (Adapter Layer - API Interface)</h3>
+    <p>This is the entry point for HTTP requests, acting as the "driving" adapter in the Hexagonal Architecture. It handles user requests and forwards them to the core business logic. The API layer is responsible for the following:</p>
+    <ul>
+        <li><b>Controllers:</b> These are responsible for managing incoming HTTP requests and sending the response back to the client. They act as API adapters that accept input (requests) and delegate business logic to the service layer.</li>
+        <li><b>Services:</b> This layer contains the business logic, implementing the application's use cases. It processes the request data, validates, and applies domain rules.</li>
+        <li><b>DTOs:</b> Data Transfer Objects (DTOs) are used to validate and transform the data that enters and exits the application.</li>
+        <li><b>Middlewares:</b> These handle cross-cutting concerns like logging, authentication, or rate-limiting, ensuring the API layer can operate correctly.</li>
+    </ul>
+
+    <h3>2. <span class="highlight">domain/</span> (Core Business Logic)</h3>
+    <p>This is the heart of the application, where all the domain logic resides. It's decoupled from any external systems and frameworks, ensuring that business rules are not impacted by changes in the infrastructure.</p>
+    <ul>
+        <li><b>Entities:</b> The core business objects (e.g., Patient, AuditLog) are represented here. These entities are used by the services to apply business logic.</li>
+        <li><b>Ports:</b> These are interfaces defining the operations the domain expects from external systems. A "port" could be a repository or a communication service, and it allows the core business logic to remain decoupled from any specific external technologies (e.g., databases, APIs).</li>
+        <li><b>Services:</b> These implement the business rules and operations. They interact with domain entities and ports (repositories or other services), ensuring that business logic is processed according to the defined rules.</li>
+    </ul>
+
+    <h3>3. <span class="highlight">infrastructure/</span> (External Adapters)</h3>
+    <p>This layer adapts the core domain logic to interact with external systems like databases, Kafka, caching services, and security mechanisms. The infrastructure layer contains:</p>
+    <ul>
+        <li><b>db/:</b> This folder contains the database models and repository implementations, which interact with external databases. The repository pattern ensures that the domain doesn't depend on the specifics of the database.</li>
+        <li><b>kafka/:</b> Kafka-based messaging systems are adapted here. It allows the application to interact with Kafka to send/receive messages, which may be part of event-driven architectures.</li>
+        <li><b>redis/:</b> Caching services (like Redis) are configured here to optimize performance, ensuring that frequently accessed data is readily available without hitting the database.</li>
+        <li><b>security/:</b> This folder handles encryption, token generation, and user authentication services, ensuring the application remains secure.</li>
+    </ul>
+
+    <h3>4. <span class="highlight">tests/</span> (Testing)</h3>
+    <p>The testing folder is organized into two sections:</p>
+    <ul>
+        <li><b>Integration Tests:</b> These tests interact with external systems, such as databases or APIs, and verify the system's ability to integrate with these components correctly.</li>
+        <li><b>Unit Tests:</b> These tests are focused on testing the core business logic and domain services. They ensure that the application’s use cases and entities behave as expected.</li>
+    </ul>
+
+    <h3>5. <span class="highlight">index.ts</span> (Application Entry Point)</h3>
+    <p>This file is the entry point of your application. It initializes the application, sets up middleware, controllers, and routes, and starts the server. This file serves as the orchestrator that ties all the parts together while staying abstracted from the business logic.</p>
+
+    <h3>6. <span class="highlight">Dockerfile</span> (Containerization)</h3>
+    <p>The Dockerfile is responsible for defining how the application will be packaged into a Docker container. It ensures that the app can run in any environment that supports Docker, promoting portability and consistency across different environments.</p>
+
+    <h3>7. <span class="highlight">.env</span> (Environment Variables)</h3>
+    <p>The .env file contains configuration settings for the application, like database URLs or secret keys, which can be easily changed based on the environment (development, staging, production). This ensures that sensitive data and environment-specific configurations are not hardcoded into the application.</p>
+
+    <h3>8. <span class="highlight">tsconfig.json</span> (TypeScript Configuration)</h3>
+    <p>The TypeScript configuration file specifies how TypeScript code should be compiled. It defines settings like the output directory, module resolution strategy, and other compiler options that ensure the TypeScript code compiles properly into JavaScript.</p>
+
+    <h3>9. <span class="highlight">package.json</span> (Dependencies)</h3>
+    <p>This file defines the dependencies, scripts, and metadata about the application. It’s the configuration file that npm uses to install packages and run scripts, ensuring that all dependencies are installed correctly and the build process runs smoothly.</p>
+
+    <h2>Conclusion</h2>
+    <p>This project structure adheres to the principles of Hexagonal Architecture, ensuring clear separation between the core domain logic and external systems. By organizing your application in this way, it becomes more maintainable, testable, and adaptable to changes in external technologies.</p>
+    
+</body>
+</html>
