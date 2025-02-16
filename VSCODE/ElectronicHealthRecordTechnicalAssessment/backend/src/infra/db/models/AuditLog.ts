@@ -11,13 +11,13 @@
  */
 
 import { DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/database';
+import { sequelize } from './config/database'; 
 
 /**
  * AuditLogAttributes - Defines the structure of an audit log entry.
  * This interface describes the shape of a log record stored in the database.
  */
-interface AuditLogAttributes {
+export interface AuditLogAttributes {
   /**
    * Unique identifier for the audit log entry.
    */
@@ -113,7 +113,9 @@ AuditLog.init(
   }
 );
 
+export { AuditLog, AuditLogCreationAttributes };
 export default AuditLog;
+
 
 /**
  * Role in Hexagonal Architecture:

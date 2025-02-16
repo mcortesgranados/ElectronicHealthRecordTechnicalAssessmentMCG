@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import AuditLogController from '../controllers/AuditLogController';
+import { AuditLogController } from '../controllers/AuditLogController';
 
 /**
  * @file auditLogRoutes.ts
