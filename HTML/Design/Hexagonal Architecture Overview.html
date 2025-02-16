@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hexagonal Architecture Overview</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        td i {
+            margin-right: 10px;
+            color: #4CAF50;
+        }
+
+        .header {
+            text-align: center;
+            font-size: 24px;
+            margin: 20px 0;
+        }
+
+        .subheader {
+            font-size: 18px;
+            margin-top: 10px;
+        }
+
+        .content-wrapper {
+            margin: 20px;
+        }
+
+        .description-col {
+            max-width: 200px;
+            word-wrap: break-word;
+        }
+
+        .enumeration {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Hexagonal Architecture Overview</h1>
+    </div>
+
+    <div class="content-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Component</th>
+                    <th>Description</th>
+                    <th>Icon</th>
+                    <th>Role in Hexagonal Architecture</th>
+                    <th>Example Use Case</th>
+                    <th>Benefits</th>
+                    <th>Related Technologies</th>
+                    <th>Best Practices</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="enumeration">1</td>
+                    <td>Core Domain (Inside the Hexagon)</td>
+                    <td class="description-col">The heart of the application containing business logic, entities, services, and use cases.</td>
+                    <td><i class="fas fa-cogs"></i></td>
+                    <td>Contains the core business rules and logic of the application.</td>
+                    <td>Business logic for processing user transactions or orders.</td>
+                    <td>Centralized logic, testable, decouples business from external dependencies.</td>
+                    <td>Java, Node.js, Python</td>
+                    <td>Keep it isolated from external frameworks and technologies.</td>
+                </tr>
+                <tr>
+                    <td class="enumeration">2</td>
+                    <td>Ports</td>
+                    <td class="description-col">Interfaces that define the entry and exit points for the core domain to interact with external systems.</td>
+                    <td><i class="fas fa-plug"></i></td>
+                    <td>Defines the communication protocols for the core domain to interact with external systems.</td>
+                    <td>API calls, database operations.</td>
+                    <td>Separation of concerns, modularity, easy to adapt to new external systems.</td>
+                    <td>RESTful APIs, gRPC, Message Queues</td>
+                    <td>Ensure interfaces are simple and well-defined, avoid over-complication.</td>
+                </tr>
+                <tr>
+                    <td class="enumeration">3</td>
+                    <td>Inbound Ports (Driving Ports)</td>
+                    <td class="description-col">Interfaces representing operations driven by external users or systems (e.g., API calls, user interactions).</td>
+                    <td><i class="fas fa-arrow-circle-right"></i></td>
+                    <td>Represent the operations that drive the system's core logic based on external actions.</td>
+                    <td>User-triggered actions like submitting a form or clicking a button.</td>
+                    <td>Clear entry points for external communication, promotes decoupling.</td>
+                    <td>REST APIs, WebSockets</td>
+                    <td>Ensure that incoming data is validated and sanitized.</td>
+                </tr>
+                <tr>
+                    <td class="enumeration">4</td>
+                    <td>Outbound Ports (Driven Ports)</td>
+                    <td class="description-col">Interfaces that the core domain uses to interact with external systems (e.g., database access, external services).</td>
+                    <td><i class="fas fa-arrow-circle-left"></i></td>
+                    <td>Represent actions or data flows from the core logic to external systems.</td>
+                    <td>Sending data to a database, making an HTTP request to an external service.</td>
+                    <td>Flexibility in changing external systems without affecting core logic.</td>
+                    <td>Databases (SQL, NoSQL), External APIs</td>
+                    <td>Keep interfaces generic to avoid tight coupling with external systems.</td>
+                </tr>
+                <tr>
+                    <td class="enumeration">5</td>
+                    <td>Adapters</td>
+                    <td class="description-col">Components that connect the external systems to the core domain by implementing the ports.</td>
+                    <td><i class="fas fa-plug"></i></td>
+                    <td>Acts as a translator between external systems and the core domain.</td>
+                    <td>Database adapter that converts a query result into a format for the core logic.</td>
+                    <td>Decouples external systems from the core application logic.</td>
+                    <td>ORM frameworks, Messaging libraries (Kafka, RabbitMQ)</td>
+                    <td>Follow the "Adapter" pattern closely to preserve separation of concerns.</td>
+                </tr>
+                <tr>
+                    <td class="enumeration">6</td>
+                    <td>Inbound Adapters</td>
+                    <td class="description-col">Adapters that handle incoming requests and translate them into a format understood by the core application.</td>
+                    <td><i class="fas fa-arrow-circle-right"></i></td>
+                    <td>Handles user or system-triggered input, converting it into a standardized form for processing.</td>
+                    <td>An HTTP request handler that validates and forwards API requests to the core domain.</td>
+                    <td>Separation of user input and core logic, enhances flexibility and scalability.</td>
+                    <td>Express.js, Spring MVC</td>
+                    <td>Ensure proper error handling and logging.</td>
+                </tr>
+                <tr>
+                    <td class="enumeration">7</td>
+                    <td>Outbound Adapters</td>
+                    <td class="description-col">Adapters that translate the output of the core domain into a format understood by external systems.</td>
+                    <td><i class="fas fa-arrow-circle-left"></i></td>
+                    <td>Transforms domain results into formats or actions expected by external systems.</td>
+                    <td>Outputting data in JSON format for an API response or sending messages to a queue.</td>
+                    <td>Easy adaptation to new systems and external format changes.</td>
+                    <td>Kafka, RabbitMQ, HTTP Clients</td>
+                    <td>Ensure the output is consistent with the external system's expectations.</td>
+                </tr>
+                <tr>
+                    <td class="enumeration">8</td>
+                    <td>External Systems</td>
+
+                    <td class="description-col">External services like databases, messaging systems, user interfaces, and APIs that the system interacts with.</td>
+                    <td><i class="fas fa-cloud"></i></td>
+                    <td>Systems outside of the core domain that provide data, perform tasks, or consume results.</td>
+                    <td>Databases (SQL, NoSQL), APIs, external services like payment gateways.</td>
+                    <td>Provides flexibility to change external systems without affecting core business logic.</td>
+                    <td>MySQL, PostgreSQL, MongoDB, Redis, RabbitMQ</td>
+                    <td>Choose external systems that align with business needs and growth potential.</td>
+                </tr>
+                <tr>
+                    <td class="enumeration">9</td>
+                    <td>Testability</td>
+                    <td class="description-col">The architecture promotes unit testing by isolating the core domain from external dependencies, making it easier to mock and test.</td>
+                    <td><i class="fas fa-check-circle"></i></td>
+                    <td>By decoupling the core domain from external dependencies, tests are easier to write.</td>
+                    <td>Unit testing the core domain logic without requiring database or external service access.</td>
+                    <td>Improves test coverage, makes mocking dependencies simpler.</td>
+                    <td>JUnit, Mocha, Jest</td>
+                    <td>Write unit tests for each core business logic operation.</td>
+                </tr>
+                <tr>
+                    <td class="enumeration">10</td>
+                    <td>Flexibility and Maintainability</td>
+                    <td class="description-col">The separation of concerns allows for easier maintenance and adaptability to new technologies or changing business requirements.</td>
+                    <td><i class="fas fa-refresh"></i></td>
+                    <td>With clearly defined interfaces and decoupled layers, maintenance becomes more straightforward.</td>
+                    <td>Changing database systems or migrating APIs without affecting the core domain logic.</td>
+                    <td>Improved adaptability to changes, easier bug fixes and updates.</td>
+                    <td>Spring Boot, Express, Flask</td>
+                    <td>Adopt solid architectural principles for long-term scalability.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>

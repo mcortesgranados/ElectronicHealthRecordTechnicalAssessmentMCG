@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Untitled Document</title>
+<style type="text/css">
+<!--
+.style1 {font-family: Arial, Helvetica, sans-serif}
+-->
+</style>
+</head>
+
+<body>
+<h3 class="style1" data-start="0" data-end="42">Introduction to Hexagonal Architecture</h3>
+<p class="style1" data-start="44" data-end="511">Hexagonal Architecture, also known as <strong data-start="82" data-end="104">Ports and Adapters</strong> architecture, is a design pattern that emphasizes separation of concerns and promotes a more flexible and maintainable system structure. It aims to decouple the core business logic from external systems, allowing the application to easily interact with various technologies, frameworks, and services without being tightly coupled to them. This makes the system more adaptable to changes and easier to test.</p>
+<p class="style1" data-start="513" data-end="863">The central idea behind Hexagonal Architecture is to create a clear distinction between the core business logic (the &quot;inside&quot; of the application) and the external elements that interact with it (the &quot;outside&quot; of the application). These external elements could include databases, message queues, web frameworks, user interfaces, or even external APIs.</p>
+<h3 class="style1" data-start="865" data-end="905">Components of Hexagonal Architecture</h3>
+<ol class="style1" data-start="907" data-end="3173">
+  <li data-start="907" data-end="1547">
+    <p data-start="910" data-end="947"><strong data-start="910" data-end="946">Core Domain (Inside the Hexagon)</strong>:</p>
+    <ul data-start="951" data-end="1547">
+      <li data-start="951" data-end="1188">The <strong data-start="957" data-end="972">core domain</strong> is the heart of the application. It contains the business rules, logic, and fundamental services that the application needs to operate. This is where all the important decisions about what the system does are made.</li>
+      <li data-start="1192" data-end="1547">The domain layer consists of:
+          <ul data-start="1229" data-end="1547">
+            <li data-start="1229" data-end="1329"><strong data-start="1231" data-end="1243">Entities</strong>: Core business objects or models that represent key concepts (e.g., Customer, Order).</li>
+            <li data-start="1335" data-end="1438"><strong data-start="1337" data-end="1349">Services</strong>: Business logic that operates on the entities and coordinates the use of external ports.</li>
+            <li data-start="1444" data-end="1547"><strong data-start="1446" data-end="1459">Use Cases</strong>: Specific operations that are carried out based on user needs or application processes.</li>
+          </ul>
+      </li>
+    </ul>
+  </li>
+  <li data-start="1549" data-end="2225">
+    <p data-start="1552" data-end="1562"><strong data-start="1552" data-end="1561">Ports</strong>:</p>
+    <ul data-start="1566" data-end="2225">
+      <li data-start="1566" data-end="2046">Ports are <strong data-start="1578" data-end="1592">interfaces</strong> that define the entry and exit points for the core domain to interact with the outside world.
+          <ul data-start="1692" data-end="2046">
+            <li data-start="1692" data-end="1853"><strong data-start="1694" data-end="1727">Inbound Ports (Driving Ports)</strong>: These are the interfaces that represent operations driven by external users or systems (e.g., API calls, user interactions).</li>
+            <li data-start="1859" data-end="2046"><strong data-start="1861" data-end="1894">Outbound Ports (Driven Ports)</strong>: These define interfaces that the domain uses to interact with external systems (e.g., database access, sending messages to queues, external services).</li>
+          </ul>
+      </li>
+      <li data-start="2050" data-end="2225">Ports allow the domain logic to remain agnostic to the external infrastructure, as it only depends on the interfaces (ports) rather than specific implementations (adapters).</li>
+    </ul>
+  </li>
+  <li data-start="2227" data-end="2916">
+    <p data-start="2230" data-end="2243"><strong data-start="2230" data-end="2242">Adapters</strong>:</p>
+    <ul data-start="2247" data-end="2916">
+      <li data-start="2247" data-end="2916">Adapters are the components that connect the external systems (like databases, UI frameworks, or messaging services) to the core application. They implement the ports defined in the domain layer.
+          <ul data-start="2450" data-end="2916">
+            <li data-start="2450" data-end="2682"><strong data-start="2452" data-end="2472">Inbound Adapters</strong>: These handle communication from external systems (e.g., HTTP API controllers, CLI commands) and translate incoming data to a format that the application understands. They invoke the inbound ports (use cases).</li>
+            <li data-start="2688" data-end="2916"><strong data-start="2690" data-end="2711">Outbound Adapters</strong>: These are responsible for taking the output of the core domain and translating it into a format that external systems understand. Examples include database repositories, API clients, and event producers.</li>
+          </ul>
+      </li>
+    </ul>
+  </li>
+  <li data-start="2918" data-end="3173">
+    <p data-start="2921" data-end="2942"><strong data-start="2921" data-end="2941">External Systems</strong>:</p>
+    <ul data-start="2946" data-end="3173">
+      <li data-start="2946" data-end="3173">The external systems include things like databases, messaging systems, web services, and user interfaces. These systems are isolated from the core logic via the adapters and are plugged into the application through the ports.</li>
+    </ul>
+  </li>
+</ol>
+<h3 class="style1" data-start="3175" data-end="3210">Scope of Hexagonal Architecture</h3>
+<ul class="style1" data-start="3212" data-end="3949">
+  <li data-start="3212" data-end="3486"><strong data-start="3214" data-end="3229">Flexibility</strong>: The main goal of Hexagonal Architecture is to create a system that is easy to modify. Since the business logic is decoupled from the external systems, it is much easier to swap out or modify the infrastructure without affecting the core application logic.</li>
+  <li data-start="3487" data-end="3726"><strong data-start="3489" data-end="3504">Testability</strong>: By isolating the core logic from the external systems, you can test it independently using unit tests. You don’t need to rely on external dependencies (such as a database or external APIs) to test the core functionality.</li>
+  <li data-start="3727" data-end="3949"><strong data-start="3729" data-end="3748">Maintainability</strong>: The clear separation of concerns makes it easier to manage the system as it grows. Each component can be maintained, extended, or replaced without causing ripple effects in other parts of the system.</li>
+</ul>
+<h3 class="style1" data-start="3951" data-end="3989">Benefits of Hexagonal Architecture</h3>
+<ol class="style1" data-start="3991" data-end="5699">
+  <li data-start="3991" data-end="4249">
+    <p data-start="3994" data-end="4249"><strong data-start="3994" data-end="4020">Separation of Concerns</strong>: Hexagonal Architecture emphasizes clean separation between the business logic and external systems, making the codebase more organized and easier to maintain. The core application logic is not mixed with infrastructure details.</p>
+  </li>
+  <li data-start="4251" data-end="4573">
+    <p data-start="4254" data-end="4573"><strong data-start="4254" data-end="4293">Easier to Adapt to New Technologies</strong>: Since external systems are plugged into the core through adapters, switching technologies (e.g., changing the database or switching to a different messaging system) becomes a less painful process. You only need to change the adapter while leaving the core business logic intact.</p>
+  </li>
+  <li data-start="4575" data-end="4886">
+    <p data-start="4578" data-end="4886"><strong data-start="4578" data-end="4605">Testability and Mocking</strong>: By isolating the core domain from external dependencies, Hexagonal Architecture makes unit testing easier. You can mock out the adapters and focus on testing the core logic. This enables more comprehensive and reliable tests, without having to spin up real services or databases.</p>
+  </li>
+  <li data-start="4888" data-end="5109">
+    <p data-start="4891" data-end="5109"><strong data-start="4891" data-end="4930">Improved Modularity and Reusability</strong>: With well-defined ports and adapters, individual components of the system can be reused or replaced independently. This modularity supports scaling and better code organization.</p>
+  </li>
+  <li data-start="5111" data-end="5440">
+    <p data-start="5114" data-end="5440"><strong data-start="5114" data-end="5155">Simplified Maintenance and Extensions</strong>: Adding new functionality or replacing a component becomes simpler because of the clearly defined structure. As the application grows, it can be extended without needing to rewrite large portions of the system. Adapters can be added or changed without disrupting the core application.</p>
+  </li>
+  <li data-start="5442" data-end="5699">
+    <p data-start="5445" data-end="5699"><strong data-start="5445" data-end="5485">Better Alignment with Business Logic</strong>: Since the application’s domain is isolated from the infrastructure, the focus is placed on the actual business logic. This results in a clearer, more consistent model that reflects the true needs of the business.</p>
+  </li>
+</ol>
+<h3 class="style1" data-start="5701" data-end="5715">Conclusion</h3>
+<p class="style1" data-start="5717" data-end="6197" data-is-last-node="">Hexagonal Architecture offers a powerful way to structure applications, providing flexibility, maintainability, and testability. By separating the core domain logic from external dependencies, it allows developers to build more adaptable systems that can evolve with changing requirements. This architecture encourages clear interfaces between components, making it easier to work with external systems, and allows the core application to stay focused on business rules and logic.</p>
+<p class="style1" data-start="5717" data-end="6197" data-is-last-node="">&nbsp;</p>
+<p class="style1" data-start="5717" data-end="6197" data-is-last-node="">&nbsp;</p>
+</body>
+</html>

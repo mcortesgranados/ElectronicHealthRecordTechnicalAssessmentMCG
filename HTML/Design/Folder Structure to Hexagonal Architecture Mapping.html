@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Folder Structure to Hexagonal Architecture Mapping</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        td i {
+            margin-right: 10px;
+            color: #4CAF50;
+        }
+
+        .header {
+            text-align: center;
+            font-size: 24px;
+            margin: 20px 0;
+        }
+
+        .content-wrapper {
+            margin: 20px;
+        }
+
+        .description-col {
+            max-width: 200px;
+            word-wrap: break-word;
+        }
+
+        .enumeration {
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+<div class="header">
+        <h1>Folder Structure to Hexagonal Architecture Mapping</h1>
+</div>
+
+<div class="content-wrapper">
+        <p>
+            <pre>
+    backend/
+    │── src/
+    │ ├── api/                    # Adapter layer (API Interface)
+    │ │ ├── controllers/          # Incoming HTTP requests (API Adapters)
+    │ │ ├── services/             # Business logic layer (Application Use Cases)
+    │ │ ├── dtos/                 # Data Transfer Objects (DTOs for validation)
+    │ │ ├── middlewares/          # Authentication, Logging (API Adapters)
+    │ │ ├── utils/                # Helper functions (Utilities)
+    │ ├── domain/                 # Core business logic
+    │ │ ├── entities/             # Core domain entities (e.g., Patient)
+    │ │ ├── ports/                # Core interfaces (e.g., Repository Port)
+    │ │ ├── services/             # Core services (Business rules)
+    │ ├── infrastructure/         # Adapters to external systems (Database, Kafka, etc.)
+    │ │ ├── db/                   # Database Models, Repositories (Adapters)
+    │ │ ├── kafka/                # Event-Based Communication (Adapters)
+    │ │ ├── redis/                # Caching Services (Adapters)
+    │ │ ├── security/             # Encryption, Token Handling (Adapters)
+    │ ├── index.ts                # Application Entry Point
+    │── tests/                     # Test folder
+    │ ├── integration/            # Integration Tests (Adapters with external systems)
+    │ ├── unit/                   # Unit Tests (Core business logic)
+    │── .env                       # Environment Variables
+    │── package.json               # Dependencies
+    │── tsconfig.json              # TypeScript Config
+    │── Dockerfile                 # Containerization
+    </pre>
+
+        </p>
+        <p>&nbsp;</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Folder/File</th>
+                    <th>Component in Hexagonal Architecture</th>
+                    <th>Relation</th>
+                  <th>Example Use Case</th>
+                    <th>Benefits & Advantages</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="enumeration"><i class="fas fa-cogs"></i>1</td>
+                    <td>backend/src/api/controllers</td>
+                    <td>Inbound Adapters</td>
+                    <td>Handles incoming HTTP requests and routes them to the appropriate service (driving ports).</td>
+                  <td>API endpoints handling user login or fetching data.</td>
+                    <td>Decouples the API interface from the business logic, making it easier to swap out external systems or adapt to new API standards.</td>
+                </tr>
+                <tr>
+                    <td class="enumeration"><i class="fas fa-cogs"></i>2</td>
+                    <td>backend/src/api/services</td>
+                    <td>Core Domain (Inside the Hexagon)</td>
+                    <td>Contains business logic and application use cases that drive the system.</td>
+                  <td>Service for processing user registration or managing transactions.</td>
+                    <td>Provides a clear separation between application logic and external concerns, enhancing maintainability and scalability.</td>
+                </tr>
+                <tr>
+                    <td class="enumeration"><i class="fas fa-cogs"></i>3</td>
+                    <td>backend/src/api/dtos</td>
+                    <td>Ports (inbound)</td>
+                    <td>Data Transfer Objects (DTOs) for validation and mapping incoming data.</td>
+                  <td>DTOs for validating user input during API calls.</td>
+                    <td>Improves flexibility in the application by allowing data to flow cleanly through the system and separating it from the core logic.</td>
+                </tr>
+                <tr>
+                    <td class="enumeration"><i class="fas fa-cogs"></i>4</td>
+                    <td>backend/src/api/middlewares</td>
+                    <td>Inbound Adapters</td>
+                    <td>Preprocessing layer for authentication, logging, and validation before the request reaches the controller.</td>
+                  <td>Middleware for checking user authentication token before accessing routes.</td>
+                    <td>Allows common functionality (e.g., authentication, logging) to be centralized, reducing code duplication and improving security.</td>
+                </tr>
+                <tr>
+                    <td class="enumeration"><i class="fas fa-cogs"></i>5</td>
+                    <td>backend/src/api/utils</td>
+                    <td>Utility (Cross-cutting concerns)</td>
+                    <td>Helper functions like logging, error handling, or file management.</td>
+                  <td>Utility for logging HTTP requests.</td>
+                    <td>Centralized utility functions promote code reuse and simplify maintenance by providing reusable components for various modules.</td>
+                </tr>
+                <tr>
+                    <td class="enumeration"><i class="fas fa-cogs"></i>6</td>
+                    <td>backend/src/domain/entities</td>
+                    <td>Core Domain (Inside the Hexagon)</td>
+                    <td>Defines the core business entities that are central to the application.</td>
+                  <td>Entities like `User`, `Order`, or `Product` that are part of the business model.</td>
+                    <td>Provides a clear representation of the business domain, improving clarity and enhancing the maintainability of the application.</td>
+                </tr>
+                <tr>
+                    <td class="enumeration"><i class="fas fa-cogs"></i>7</td>
+                    <td>backend/src/domain/ports</td>
+                    <td>Ports (Core Interfaces)</td>
+                    <td>Interfaces for communication with the outside world (e.g., repositories or services).</td>
+                  <td>Repository interfaces for managing user data.</td>
+                    <td>Enables decoupling and makes it easier to replace or mock dependencies, improving testability and flexibility.</td>
+                </tr>
+                <tr>
+                    <td class="enumeration"><i class="fas fa-cogs"></i>8</td>
+                    <td>backend/src/domain/services</td>
+                    <td>Core Domain (Inside the Hexagon)</td>
+                    <td>Contains core business rules and logic (use cases) for processing requests.</td>
+                  <td>Business service for managing order processing or payment flow.</td>
+                    <td>Centralizes business logic, promoting clean code practices and reducing duplication across the application.</td>
+                </tr>
+                <tr>
+                    <td class="enumeration"><i class="fas fa-cogs"></i>9</td>
+                    <td>backend/src/infrastructure/db</td>
+                    <td>Outbound Adapters</td>
+                    <td>Database-related operations, repositories, and models (driven ports).</td>
+                  <td>Repository for interacting with a database to fetch or store data.</td>
+                    <td>Improves maintainability by isolating database-specific code from business logic, allowing for easier database changes.</td>
+                </tr>
+                <tr>
+                    <td class="enumeration"><i class="fas fa-cogs"></i>10</td>
+                    <td>backend/src/infrastructure/messaging</td>
+                    <td>Outbound Adapters</td>
+                    <td>Handles communication with external systems like queues, Kafka, etc.</td>
+                  <td>Messaging system for sending notifications or processing tasks in the background.</td>
+                    <td>Improves flexibility in communication with external systems and decouples the core logic from infrastructure dependencies.</td>
+                </tr>
+                <tr>
+                    <td class="enumeration"><i class="fas fa-cogs"></i>11</td>
+                    <td>backend/src/infrastructure/external</td>
+                    <td>Outbound Adapters</td>
+                    <td>Interfaces to interact with third-party services or external systems like email, payments, etc.</td>
+                  <td>Integrating a payment gateway to handle user transactions.</td>
+                    <td>Decouples the core business logic from third-party dependencies, making it easier to switch external services when needed.</td>
+                </tr>
+                <tr>
+                    <td class="enumeration"><i class="fas fa-cogs"></i>12</td>
+                    <td>backend/src/infrastructure/config</td>
+                    <td>Outbound Adapters</td>
+                    <td>Configuration for the external systems, environments, and services.</td>
+                  <td>Configuration files for database connections, API keys, and other external service credentials.</td>
+                    <td>Centralized configuration for external dependencies simplifies deployment and environment management.</td>
+                </tr>
+            </tbody>
+        </table>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+</div>
+
+</body>
+</html>
