@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuditLogRepository - Technical Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        code {
+            background: #f4f4f4;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        .section {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-left: 5px solid #3498db;
+            background: #ecf0f1;
+        }
+        .method {
+            background: #f9f9f9;
+            padding: 10px;
+            border-left: 5px solid #27ae60;
+        }
+        .important {
+            background: #ffeaa7;
+            padding: 10px;
+            border-left: 5px solid #e67e22;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>AuditLogRepository - Technical Documentation</h1>
+    
+    <div class="section">
+        <h2>File Overview</h2>
+        <p><strong>File:</strong> <code>AuditLogRepository.ts</code></p>
+        <p><strong>Description:</strong> This repository provides methods for interacting with the <code>audit_logs</code> table in the database.</p>
+    </div>
+
+    <div class="section">
+        <h2>Role in Hexagonal Architecture</h2>
+        <ul>
+            <li><strong>Layer:</strong> This file is part of the <strong>Infrastructure Layer</strong>.</li>
+            <li><strong>Driven Adapter:</strong> Acts as a <strong>data access layer</strong> that provides an abstraction over the database.</li>
+            <li><strong>Decoupling:</strong> Ensures that business logic does <em>not</em> depend on the database implementation.</li>
+            <li><strong>Flexibility:</strong> Facilitates <strong>database migrations</strong> (e.g., switching from MySQL to PostgreSQL) with minimal code changes.</li>
+            <li><strong>Testability:</strong> Abstracting database interactions makes it easier to write <strong>mock tests</strong> without requiring an actual database connection.</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Class: AuditLogRepository</h2>
+        <p>This class handles all database interactions related to audit logging.</p>
+    </div>
+
+    <div class="method">
+        <h3>Method: <code>createLog(logData: Partial&lt;AuditLog&gt;): Promise&lt;AuditLog&gt;</code></h3>
+        <p><strong>Description:</strong> Creates a new audit log entry in the database.</p>
+        <h4>Parameters:</h4>
+        <ul>
+            <li><code>logData</code> (Partial&lt;AuditLog&gt;) - Partial audit log data received from the application layer.</li>
+        </ul>
+        <h4>Returns:</h4>
+        <ul>
+            <li><code>Promise&lt;AuditLog&gt;</code> - The created audit log entry.</li>
+        </ul>
+        <h4>Throws:</h4>
+        <ul>
+            <li><code>Error</code> - If required fields are missing.</li>
+        </ul>
+        <h4>Business Importance:</h4>
+        <ul>
+            <li>Ensures that <strong>all system changes</strong> are recorded for auditing and compliance purposes.</li>
+            <li>Logs critical user actions to provide <strong>traceability</strong> and <strong>security</strong>.</li>
+        </ul>
+    </div>
+
+    <div class="method">
+        <h3>Method: <code>getLogs(): Promise&lt;AuditLog[]&gt;</code></h3>
+        <p><strong>Description:</strong> Retrieves all audit log entries from the database.</p>
+        <h4>Returns:</h4>
+        <ul>
+            <li><code>Promise&lt;AuditLog[]&gt;</code> - An array of audit logs.</li>
+        </ul>
+        <h4>Business Importance:</h4>
+        <ul>
+            <li>Provides <strong>visibility</strong> into system changes.</li>
+            <li>Enables security teams to review <strong>who made changes and when</strong>.</li>
+        </ul>
+    </div>
+
+    <div class="method">
+        <h3>Method: <code>getLogById(id: string): Promise&lt;AuditLog | null&gt;</code></h3>
+        <p><strong>Description:</strong> Retrieves a specific audit log entry by its ID.</p>
+        <h4>Parameters:</h4>
+        <ul>
+            <li><code>id</code> (string) - The unique identifier of the audit log entry.</li>
+        </ul>
+        <h4>Returns:</h4>
+        <ul>
+            <li><code>Promise&lt;AuditLog | null&gt;</code> - The requested audit log entry or <code>null</code> if not found.</li>
+        </ul>
+        <h4>Business Importance:</h4>
+        <ul>
+            <li>Allows retrieval of <strong>specific logs</strong> for investigations.</li>
+            <li>Helps in debugging issues by tracking <strong>historical changes</strong>.</li>
+        </ul>
+    </div>
+
+    <div class="important">
+        <h2>Exports</h2>
+        <p><code>export default new AuditLogRepository();</code></p>
+        <p><strong>Purpose:</strong> Exports a singleton instance of the repository to be used across the application.</p>
+    </div>
+
+</body>
+</html>
