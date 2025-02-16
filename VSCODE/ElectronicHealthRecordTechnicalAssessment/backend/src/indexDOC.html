@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hexagonal Architecture - Ports & Adapters</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #333;
+            color: white;
+        }
+        .highlight {
+            color: #007bff;
+            font-weight: bold;
+        }
+        .checklist {
+            list-style-type: none;
+            padding: 0;
+        }
+        .checklist li {
+            padding: 5px 0;
+        }
+        .checklist li::before {
+            content: "✅ ";
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>📌 Role in Hexagonal Architecture (Ports & Adapters)</h1>
+    <p>This file acts as the <span class="highlight">Primary Adapter (Driving Adapter)</span> in Hexagonal Architecture, meaning it:</p>
+    <ul>
+        <li>Handles <strong>external interactions</strong> by setting up an HTTP API.</li>
+        <li>Does <strong>not</strong> contain business logic—it delegates it to the <strong>Application Core (Use Case Layer)</strong>.</li>
+        <li>Initializes <strong>adapters</strong> (Express & MySQL) to interact with users and the database.</li>
+    </ul>
+    
+    <h2>🌟 Breakdown of Responsibilities</h2>
+    <table>
+        <tr>
+            <th>Component</th>
+            <th>Hexagonal Role</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td><code>checkDatabaseConnection()</code></td>
+            <td class="highlight">Infrastructure Adapter (Secondary Adapter)</td>
+            <td>Ensures the database is available before launching the server.</td>
+        </tr>
+        <tr>
+            <td><code>express.json()</code></td>
+            <td class="highlight">Primary Adapter</td>
+            <td>Parses incoming JSON payloads from HTTP requests.</td>
+        </tr>
+        <tr>
+            <td><code>app.use("/api", auditLogRoutes);</code></td>
+            <td class="highlight">Primary Adapter</td>
+            <td>Exposes REST API endpoints (driven by HTTP requests).</td>
+        </tr>
+        <tr>
+            <td><code>AuditLogService</code> (used in controllers)</td>
+            <td class="highlight">Application Core (Use Case Layer)</td>
+            <td>Business logic related to audit logs.</td>
+        </tr>
+        <tr>
+            <td><code>AuditLogRepository</code> (used in services)</td>
+            <td class="highlight">Infrastructure Adapter</td>
+            <td>Interacts with the database to store/fetch logs.</td>
+        </tr>
+    </table>
+    
+    <h2>🚀 Why This Design?</h2>
+    <ul class="checklist">
+        <li><strong>Decoupled</strong> → Express, database, and business logic are independent.</li>
+        <li><strong>Flexible</strong> → If needed, you can swap Express for GraphQL, gRPC, etc.</li>
+        <li><strong>Testable</strong> → Easy to mock database connections and isolate API testing.</li>
+    </ul>
+    
+    <p>This setup ensures a <span class="highlight">scalable and maintainable</span> architecture for your system! 🚀</p>
+</body>
+</html>

@@ -1,43 +1,73 @@
-import dotenv from "dotenv";  // Load dotenv at the very top
-dotenv.config();  // Load environment variables from .env file
-
+import dotenv from "dotenv";
+import path from "path";
 import express from "express";
+import mysql from "mysql2/promise";
 import auditLogRoutes from "./api/routes/auditLogs";
 
-/**
- * @file server.ts
- * @description This is the main entry point of the application.
- * 
- * ### Role in Hexagonal Architecture:
- * - This file is part of the **Infrastructure Layer**.
- * - It sets up the **Express server**, configures middleware, and integrates the API routes.
- * - It acts as the **primary adapter** that allows external clients (e.g., frontend, third-party services) 
- *   to communicate with the application.
- * - This file **should not contain business logic**; its role is to bootstrap the application 
- *   and define global configurations.
- * 
- * ### Interaction with Other Layers:
- * - **Client (External Systems) → Express Server (Infrastructure Layer) → API Router (Driving Adapter) → Controller (Application Layer) → Services (Domain Layer) → Repository (Data Layer)**
- * - This architecture ensures that the **server remains decoupled from business logic**, making it **scalable and maintainable**.
- */
+dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
-// Create an instance of an Express application
-const app = express();
-
-// Middleware to parse incoming JSON requests.
-app.use(express.json());
-
-// Mount audit log routes under the `/api` prefix
-app.use("/api", auditLogRoutes);
-
-// Define the port number for the Express server
-const PORT = process.env.PORT || 3000;
-
-// Log environment variables (for debugging)
 console.log("Database Host:", process.env.DB_HOST);
 console.log("Database User:", process.env.DB_USER);
+console.log("Database Port:", process.env.DB_PORT);
 
-// Start the Express server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+const dbConfig = {
+  host: process.env.DB_HOST || "localhost",
+  user: process.env.DB_USER || "root",
+  password: process.env.DB_PASSWORD || "",
+  database: process.env.DB_NAME || "test",
+  port: Number(process.env.DB_PORT) || 3306,
+};
+
+// Function to check the MySQL database connection
+async function checkDatabaseConnection(retries = 3, delay = 3000): Promise<void> {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      console.log(`🔍 Attempt ${attempt}: Checking MySQL database connection...`);
+      
+      const connection = await mysql.createConnection(dbConfig);
+      await connection.ping(); // Ensure the connection is active
+      
+      console.log("✅ Database connection successful!");
+      await connection.end();
+      return;
+    } catch (error) {
+      console.error(`❌ Attempt ${attempt} failed: ${(error as Error).message}`);
+      if (attempt < retries) {
+        console.log(`🔄 Retrying in ${delay / 1000} seconds...`);
+        await new Promise((resolve) => setTimeout(resolve, delay));
+      } else {
+        console.error("❌ All attempts failed. Exiting...");
+        process.exit(1);
+      }
+    }
+  }
+}
+
+// Start the server only if the database connection is successful
+async function startServer() {
+  try {
+    await checkDatabaseConnection(); // Validate DB connection before server start
+
+    // Create an Express application
+    const app = express();
+    
+    // Middleware to parse incoming JSON requests
+    app.use(express.json());
+
+    // Mount audit log routes under the `/api` prefix
+    app.use("/api", auditLogRoutes);
+
+    // Define the port number for the Express server
+    const PORT = process.env.PORT || 3000;
+
+    // Start the Express server
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("❌ Failed to start server:", error);
+  }
+}
+
+// Run the application
+startServer();
