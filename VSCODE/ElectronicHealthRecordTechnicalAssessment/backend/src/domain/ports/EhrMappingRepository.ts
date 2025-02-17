@@ -13,6 +13,9 @@
  *   **Infrastructure Layer** provide actual database interactions.
  * - 🚀 **Flexibility:** Allows switching storage mechanisms (SQL, NoSQL, APIs) without 
  *   affecting business logic.
+ * - 🧑‍🔧 **Facilitates Testability:** As a port, this interface enables easier testing by allowing 
+ *   mock implementations to be used during unit tests, ensuring business logic can be tested 
+ *   independently of infrastructure concerns.
  */
 export interface EhrMappingRepository {
   /**
@@ -24,6 +27,23 @@ export interface EhrMappingRepository {
    * 🔹 **Responsibilities:**
    * - Ensures persistence of a new EHR mapping entity.
    * - Provides a standard interface for different storage implementations.
+   * - 🚀 **Adaptability:** This method can be implemented to persist data across a variety of storage 
+   *   systems (SQL, NoSQL, etc.), without the domain layer needing to change.
    */
   create(ehrMapping: Omit<EhrMapping, "id">): Promise<EhrMapping>;
+
+  /**
+   * 🔍 Finds EHR mappings by EHR name.
+   *
+   * @param {string} ehrName - The EHR system's name to search for mappings.
+   * @returns {Promise<EhrMapping[]>} - A list of `EhrMapping` entities associated with the provided name.
+   *
+   * 🔹 **Responsibilities:**
+   * - Retrieves EHR mapping data based on specific criteria (EHR system name).
+   * - Ensures querying of data while maintaining independence from the underlying data store.
+   * - 🔌 **Abstracts Infrastructure Details:** The actual query mechanism (SQL queries, NoSQL filters) 
+   *   is abstracted behind the repository interface, ensuring that the application logic remains agnostic 
+   *   to infrastructure specifics.
+   */
+  findByEhrName(ehrName: string): Promise<EhrMapping[]>;
 }
