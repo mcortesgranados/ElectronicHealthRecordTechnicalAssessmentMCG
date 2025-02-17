@@ -23,6 +23,9 @@ const router = Router();
  * ## Why It Exists:
  * - To provide an HTTP interface for creating a new EhrMapping in the system.
  * - The route is decoupled from the business logic, allowing flexibility in handling EhrMapping data.
+ * 
+ * ## Example:
+ * - An external client sends a POST request with the data to `/ehr-mappings`, which is then processed by the controller and service.
  */
 router.post('/ehr-mappings', (req, res) => ehrMappingController.create(req, res));
 
@@ -38,6 +41,9 @@ router.post('/ehr-mappings', (req, res) => ehrMappingController.create(req, res)
  * ## Why It Exists:
  * - To provide an HTTP interface for retrieving an EhrMapping by its unique ID.
  * - This route allows external clients to query the system for specific EhrMapping data without exposing any internal logic.
+ * 
+ * ## Example:
+ * - An external client sends a GET request to `/ehr-mappings/:id`, and the controller retrieves the EhrMapping via the service layer.
  */
 
 export default router;
