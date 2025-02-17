@@ -22,6 +22,12 @@ export class EhrMappingService {
   async createEhrMapping(data: Omit<EhrMapping, 'id'>): Promise<EhrMapping> {
     return this.ehrMappingRepository.create(data);  // Delegates data creation to the repository implementation.
   }
+
+  // New method to retrieve EHR mappings by their `ehr_name`.
+  // It delegates the query operation to the repository to fetch the required data.
+  async findByEhrName(ehrName: string): Promise<EhrMapping[]> {
+    return this.ehrMappingRepository.findByEhrNameQuery(ehrName);  // Delegates to repository method for querying data.
+  }
 }
 
 // Here we instantiate the concrete repository implementation (infrastructure layer),
