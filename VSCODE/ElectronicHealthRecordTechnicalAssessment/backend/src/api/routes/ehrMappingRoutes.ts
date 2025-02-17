@@ -28,6 +28,8 @@ const router = Router();
  * - An external client sends a POST request with the data to `/ehr-mappings`, which is then processed by the controller and service.
  */
 router.post('/ehr-mappings', (req, res) => ehrMappingController.create(req, res));
+router.get('/ehr-mappings/ehr-name/:ehrName', (req, res) => ehrMappingController.findByEhrName(req, res));
+
 
 /**
  * @route GET /ehr-mappings/:id
