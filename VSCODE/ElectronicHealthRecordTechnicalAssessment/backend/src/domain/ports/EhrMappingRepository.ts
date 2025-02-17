@@ -46,4 +46,5 @@ export interface EhrMappingRepository {
    *   to infrastructure specifics.
    */
   findByEhrName(ehrName: string): Promise<EhrMapping[]>;
+  findByEhrNameQuery(ehrName: string): Promise<EhrMapping[]>
 }

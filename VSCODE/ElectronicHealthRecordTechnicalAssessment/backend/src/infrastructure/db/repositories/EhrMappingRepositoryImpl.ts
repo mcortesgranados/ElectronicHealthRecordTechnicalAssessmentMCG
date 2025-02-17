@@ -75,5 +75,41 @@ export class EhrMappingRepositoryImpl implements EhrMappingRepository {
         )
     );
   }
+
+    /**
+   * 📝 Fetches EHR mappings by EHR system name.
+   *
+   * @param {string} ehrName - The name of the EHR system to filter mappings by.
+   * @returns {Promise<EhrMapping[]>} - List of `EhrMapping` entities matching the `ehr_name`.
+   *
+   * 🔹 **Responsibilities:**
+   * - Receives an `ehr_name` parameter to filter mappings.
+   * - Uses `EhrMappingModel` (ORM) to query the database for matching records.
+   * - Returns a list of `EhrMapping` entities.
+   *
+   * 🔄 **Hexagonal Architecture Role:**
+   * - 🎯 Serves as an adapter for querying data from the infrastructure layer (database).
+   * - 🔌 Keeps the domain layer free from direct database dependencies, allowing for flexibility.
+   */
+  async findByEhrNameQuery(ehrName: string): Promise<EhrMapping[]> {
+    // Querying the database using the `ehr_name` filter
+    const results = await EhrMappingModel.findAll({
+      where: { ehr_name: ehrName },
+    });
+
+    // Returning the filtered list of `EhrMapping` entities
+    return results.map(
+      (result) =>
+        new EhrMapping(
+          result.id,
+          result.ehr_name,
+          result.question_key,
+          result.ehr_field
+          //result.created_at,
+          //result.updated_at
+        )
+    );
+  }
+
   
 }
