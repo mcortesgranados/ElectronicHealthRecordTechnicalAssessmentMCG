@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API cURL Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        h2 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <h1>API cURL Documentation</h1>
+
+    <h2>POST Request: Create Patient Response</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>HTTP Method</th>
+                <th>URL</th>
+                <th>Request</th>
+                <th>Response</th>
+                <th>cURL</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>POST</td>
+                <td>http://localhost:3000/patient-response/patient-responses</td>
+                <td>
+                    <pre>
+{ 
+    "patient_id": 123, 
+    "ehr_system": "SystemA", 
+    "mapped_data": "{\"field1\":\"value1\", \"field2\":\"value2\"}", 
+    "submitted_at": "2025-02-17T12:00:00Z" 
+}
+                    </pre>
+                </td>
+                <td>
+                    <pre>
+{
+    "id": 13,
+    "patientId": 123,
+    "ehrSystem": "SystemA",
+    "mappedData": "{\"field1\":\"value1\", \"field2\":\"value2\"}",
+    "submittedAt": "2025-02-17T12:00:00.000Z"
+}
+                    </pre>
+                </td>
+                <td>
+                    <pre>
+curl --request POST \
+--url http://localhost:3000/patient-response/patient-responses \
+--header 'Content-Type: application/json' \
+--data '{ "patient_id": 123, "ehr_system": "SystemA", "mapped_data": "{\"field1\":\"value1\", \"field2\":\"value2\"}", "submitted_at": "2025-02-17T12:00:00Z" }'
+                    </pre>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>GET Request: Fetch EHR Mappings for AthenaHealth</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>HTTP Method</th>
+                <th>URL</th>
+                <th>Request</th>
+                <th>Response</th>
+                <th>cURL</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>GET</td>
+                <td>http://localhost:3000/ehrmappings/ehr-mappings/ehr-name/AthenaHealth</td>
+                <td>
+                    <pre>
+{ "Content-Type": "application/json" }
+                    </pre>
+                </td>
+                <td>
+                    <pre>
+[
+    {
+        "id": 1,
+        "ehr_name": "AthenaHealth",
+        "question_key": "name",
+        "ehr_field": "PATIENT_IDENT_NAME"
+    },
+    {
+        "id": 4,
+        "ehr_name": "AthenaHealth",
+        "question_key": "gender",
+        "ehr_field": "GENDER_OF_PATIENT"
+    },
+    {
+        "id": 5,
+        "ehr_name": "AthenaHealth",
+        "question_key": "dob",
+        "ehr_field": "DATE_OF_BIRTH_PATIENT"
+    }
+]
+                    </pre>
+                </td>
+                <td>
+                    <pre>
+curl --request GET \
+--url http://localhost:3000/ehrmappings/ehr-mappings/ehr-name/AthenaHealth \
+--header 'Content-Type: application/json'
+                    </pre>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>POST Request: Create EHR Mapping</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>HTTP Method</th>
+                <th>URL</th>
+                <th>Request</th>
+                <th>Response</th>
+                <th>cURL</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>POST</td>
+                <td>http://localhost:3000/ehrmappings/ehr-mappings</td>
+                <td>
+                    <pre>
+{ 
+    "ehr_name": "addfsasfdaafds", 
+    "question_key": "patient_allergy", 
+    "ehr_field": "allergy_list" 
+}
+                    </pre>
+                </td>
+                <td>
+                    <pre>
+{
+    "id": 38,
+    "ehr_name": "addfsasfdaafds",
+    "question_key": "patient_allergy",
+    "ehr_field": "allergy_list"
+}
+                    </pre>
+                </td>
+                <td>
+                    <pre>
+curl --request POST \
+--url http://localhost:3000/ehrmappings/ehr-mappings \
+--header 'Content-Type: application/json' \
+--data '{ "ehr_name": "addfsasfdaafds", "question_key": "patient_allergy", "ehr_field": "allergy_list" }'
+                    </pre>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>POST Request: Create Audit Log</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>HTTP Method</th>
+                <th>URL</th>
+                <th>Request</th>
+                <th>Response</th>
+                <th>cURL</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>POST</td>
+                <td>http://localhost:3000/api/audit-logs</td>
+                <td>
+                    <pre>
+{ 
+    "user_id": "1", 
+    "ehr_mapping_id": "1", 
+    "action": "1", 
+    "changes": { "field": "1" } 
+}
+                    </pre>
+                </td>
+                <td>
+                    <pre>
+{
+    "message": "Log created successfully",
+    "log": {
+        "id": "dcb4da57-694f-4467-a84b-41a3982d5d58",
+        "created_at": "2025-02-16T02:06:20.969Z",
+        "user_id": "1",
+        "ehr_mapping_id": "1",
+        "action": "1",
+        "changes": {
+            "field": "1"
+        }
+    }
+}
+                    </pre>
+                </td>
+                <td>
+                    <pre>
+curl --request POST \
+--url http://localhost:3000/api/audit-logs \
+--header 'Content-Type: application/json' \
+--data '{ "user_id": "1", "ehr_mapping_id": "1", "action": "1", "changes": { "field": "1" } }'
+                    </pre>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>
