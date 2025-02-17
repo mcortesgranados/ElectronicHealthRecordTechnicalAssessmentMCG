@@ -16,6 +16,7 @@ import { EhrMapping } from "../../../domain/entities/EhrMapping";
  * - 🚀 **Decoupling:** Keeps the domain logic clean by isolating database-specific details.
  */
 export class EhrMappingRepositoryImpl implements EhrMappingRepository {
+
   /**
    * 📝 Creates a new EHR mapping entry in the database.
    *
@@ -26,6 +27,10 @@ export class EhrMappingRepositoryImpl implements EhrMappingRepository {
    * - Receives an `EhrMapping` object without an ID.
    * - Uses `EhrMappingModel` (ORM) to persist the entity.
    * - Returns the stored entity with an assigned ID.
+   *
+   * 🔄 **Hexagonal Architecture Role:**
+   * - 🎯 Acts as an implementation of the port (`EhrMappingRepository`), interacting with the database.
+   * - 🔌 The domain layer is decoupled from the database by utilizing this adapter class.
    */
   async create(ehrMapping: Omit<EhrMapping, "id">): Promise<EhrMapping> {
     const result = await EhrMappingModel.create(ehrMapping);
@@ -38,4 +43,37 @@ export class EhrMappingRepositoryImpl implements EhrMappingRepository {
       // result.updated_at
     );
   }
+
+  /**
+   * 📝 Fetches EHR mappings by EHR system name.
+   *
+   * @param {string} ehrName - The name of the EHR system to filter mappings by.
+   * @returns {Promise<EhrMapping[]>} - List of `EhrMapping` entities matching the `ehr_name`.
+   *
+   * 🔹 **Responsibilities:**
+   * - Receives an `ehr_name` parameter to filter mappings.
+   * - Uses `EhrMappingModel` (ORM) to query the database for matching records.
+   * - Returns a list of `EhrMapping` entities.
+   *
+   * 🔄 **Hexagonal Architecture Role:**
+   * - 🎯 Serves as an adapter for querying data from the infrastructure layer (database).
+   * - 🔌 Keeps the domain layer free from direct database dependencies, allowing for flexibility.
+   */
+  async findByEhrName(ehrName: string): Promise<EhrMapping[]> {
+    const results = await EhrMappingModel.findAll({
+      where: { ehr_name: ehrName },
+    });
+    return results.map(
+      (result) =>
+        new EhrMapping(
+          result.id,
+          result.ehr_name,
+          result.question_key,
+          result.ehr_field
+          //result.created_at,
+          //result.updated_at
+        )
+    );
+  }
+  
 }
