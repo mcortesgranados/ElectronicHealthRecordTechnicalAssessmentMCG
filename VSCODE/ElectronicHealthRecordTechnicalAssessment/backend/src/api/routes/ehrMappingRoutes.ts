@@ -1,48 +1,37 @@
 /**
- * 🏗️ EhrMapping Routes - Express Router for EHR Mapping Operations
+ * 🏗️ EHR Mapping Routes Setup
  *
- * This module sets up the routes for handling HTTP requests related to EHR mappings. 
- * It defines the HTTP endpoints and connects them to the appropriate controller methods.
- * This module is the final part of the "Adapter" side in the Hexagonal Architecture 
- * and is responsible for connecting the outside world (HTTP) to the inner application logic.
+ * This module sets up the routing for handling EHR mapping-related HTTP requests, including 
+ * creating new EHR mappings. It acts as the interface adapter between the external HTTP 
+ * requests and the application/business logic layer.
  *
  * 🏛️ **Role in Hexagonal Architecture:**
- * - 🎯 **Adapter Layer (HTTP Adapter):** This router acts as an interface adapter, converting 
- *   HTTP requests into service calls and then sending the response back to the client.
- * - 🔌 **Entry Point to the Application Layer:** It connects the external HTTP requests to the 
- *   internal application layer (controller and service).
- * - 🛠 **Dependencies Injection:** It injects the `EhrMappingRepository` into the service, 
- *   the service into the controller, and then wires up the controller methods to the routes.
- * - 🧩 **Separation of Concerns:** By using this router, the HTTP-specific code (request/response) 
- *   is kept separate from the core business logic.
+ * - 🎯 **Interface Adapter (Routing Layer):** Acts as the entry point for HTTP requests related 
+ *   to EHR mappings, delegating to the `EhrMappingController` for processing.
+ * - 🔌 **Decouples HTTP Layer from Business Logic:** Routes HTTP requests to the controller, 
+ *   which in turn interacts with the service layer. This keeps HTTP-specific concerns separate 
+ *   from the core application logic.
+ * - 🚀 **Orchestrates Service and Repository Interaction:** The routes instantiate the controller, 
+ *   passing the `EhrMappingService`, which interacts with the `EhrMappingRepositoryImpl` to 
+ *   persist data, ensuring a separation of concerns between business logic and data storage.
+ * - 🧩 **Flexible and Extensible:** The routing layer is modular, making it easy to add, update, 
+ *   or remove routes without affecting the rest of the application.
  */
+import express from "express";
+import { EhrMappingController } from "../controllers/EhrMappingController";
+import { EhrMappingService } from "../services/EhrMappingService";
+import { EhrMappingRepositoryImpl } from "../../infrastructure/db/repositories/EhrMappingRepositoryImpl";
 
-/**
- * 🎯 **Routes Setup:**
- * - **POST `/`**: Creates a new EHR mapping entry.
- *   - Calls `create()` method on `EhrMappingController`.
- *   - Uses `EhrMappingService` for business logic and `EhrMappingRepository` for data persistence.
- */
-
-/**
- * 🛠 **Router Initialization:**
- * - Initializes dependencies:
- *   - `EhrMappingRepositoryImpl`: The implementation of the repository responsible for data storage.
- *   - `EhrMappingService`: Orchestrates the business logic related to EHR mappings.
- *   - `EhrMappingController`: Handles HTTP requests and invokes the service methods.
- * - Defines the HTTP POST endpoint to handle the creation of EHR mappings.
- */
-
-// Initialize the router
+// Initialize Router
 const router = express.Router();
 
-// Instantiate the repository, service, and controller
+// Initialize the Repository, Service, and Controller
 const ehrMappingRepository = new EhrMappingRepositoryImpl();
 const ehrMappingService = new EhrMappingService(ehrMappingRepository);
 const ehrMappingController = new EhrMappingController(ehrMappingService);
 
-// Define the POST route for creating a new EHR mapping
+// Define Routes
 router.post("/", (req, res) => ehrMappingController.create(req, res));
 
-// Export the router to be used in the main app
+// Export the router for use in the main application
 export default router;
