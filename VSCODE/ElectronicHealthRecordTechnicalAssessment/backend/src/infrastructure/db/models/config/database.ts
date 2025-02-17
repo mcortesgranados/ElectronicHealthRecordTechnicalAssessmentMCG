@@ -1,6 +1,8 @@
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 import path from 'path';
+import { Patient } from '../Patient'; // Ensure correct path
+
 
 
 
@@ -70,3 +72,9 @@ export const sequelize = new Sequelize(
 sequelize.authenticate()
   .then(() => console.log('✅ Database connection successful!'))
   .catch(err => console.error('❌ Database connection failed:', err));
+
+  Patient.initModel();
+
+  sequelize.sync()
+  .then(() => console.log('✅ Database synchronized successfully!'))
+  .catch(err => console.error('❌ Error synchronizing database:', err));

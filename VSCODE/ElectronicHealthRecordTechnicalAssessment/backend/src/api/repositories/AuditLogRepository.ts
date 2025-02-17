@@ -18,7 +18,7 @@
  *   between business logic and database concerns.
  */
 
-import AuditLog, { AuditLogCreationAttributes } from '../../infra/db/models/AuditLog';
+import AuditLog, { AuditLogCreationAttributes } from '../../infrastructure/db/models/AuditLog';
 
 /**
  * Represents a repository for handling audit log entries.
