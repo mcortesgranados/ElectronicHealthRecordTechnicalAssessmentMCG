@@ -17,7 +17,7 @@
  * - 🧩 **Flexible and Extensible:** The routing layer is modular, making it easy to add, update, 
  *   or remove routes without affecting the rest of the application.
  */
-import express from "express";
+import express, { Request, Response } from 'express';
 import { EhrMappingController } from "../controllers/EhrMappingController";
 import { EhrMappingService } from "../services/EhrMappingService";
 import { EhrMappingRepositoryImpl } from "../../infrastructure/db/repositories/EhrMappingRepositoryImpl";
@@ -31,7 +31,7 @@ const ehrMappingService = new EhrMappingService(ehrMappingRepository);
 const ehrMappingController = new EhrMappingController(ehrMappingService);
 
 // Define Routes
-router.post("/", (req, res) => ehrMappingController.create(req, res));
+router.post("/", (req: Request, res: Response) => ehrMappingController.create(req, res));
 
 // Export the router for use in the main application
 export default router;
