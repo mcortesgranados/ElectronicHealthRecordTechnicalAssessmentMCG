@@ -24,25 +24,25 @@ export class EhrMappingController {
 
   // The 'findByEhrName' method handles requests to retrieve EhrMappings by the 'ehr_name' field.
 // It delegates the query operation to the service layer, which interacts with the repository.
-async findByEhrName(req: Request, res: Response): Promise<void> {
-  try {
-    const { ehrName } = req.params;  // Extract 'ehrName' from URL parameters
+  async findByEhrName(req: Request, res: Response): Promise<void> {
+    try {
+      const { ehrName } = req.params;  // Extract 'ehrName' from URL parameters
 
-    // Call the service to get EhrMappings by ehrName
-    const ehrMappings = await this.ehrMappingService.findByEhrName(ehrName);
+      // Call the service to get EhrMappings by ehrName
+      const ehrMappings = await this.ehrMappingService.findByEhrName(ehrName);
 
-    if (ehrMappings.length > 0) {
-      // Return the list of EhrMappings if found
-      res.status(200).json(ehrMappings);
-    } else {
-      // Respond with a 404 if no EhrMappings are found
-      res.status(404).json({ message: `No EhrMappings found for ehr_name: ${ehrName}` });
+      if (ehrMappings.length > 0) {
+        // Return the list of EhrMappings if found
+        res.status(200).json(ehrMappings);
+      } else {
+        // Respond with a 404 if no EhrMappings are found
+        res.status(404).json({ message: `No EhrMappings found for ehr_name: ${ehrName}` });
+      }
+    } catch (error) {
+      // Handle any server errors
+      res.status(500).json({ message: "Internal Server Error", error });
     }
-  } catch (error) {
-    // Handle any server errors
-    res.status(500).json({ message: "Internal Server Error", error });
   }
-}
 
 
   // The 'getEhrMapping' method (not yet implemented) will handle requests for retrieving EHR mappings.
