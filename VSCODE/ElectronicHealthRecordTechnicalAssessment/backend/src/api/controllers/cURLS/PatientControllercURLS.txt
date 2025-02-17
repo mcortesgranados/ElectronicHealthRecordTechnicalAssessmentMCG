@@ -1,0 +1,21 @@
+curl --request POST \
+  --url http://localhost:3000/api/patients/patients \
+  --header 'Content-Type: application/json' \
+  --data '{
+    "name": "John Doe",
+    "gender": "Male",
+    "dob": "1985-06-15",
+    "address": "123 Main St, Springfield",
+    "phone": "+1-555-1234",
+    "email": "john.doe@example.com",
+    "emergency_contact": "Jane Doe, +1-555-5678",
+    "insurance_provider": "BlueCross",
+    "insurance_policy_number": "BC123456789",
+    "primary_care_physician": "Dr. Emily Carter",
+    "allergies": "Peanuts, Penicillin",
+    "current_medications": "Metformin, Lisinopril",
+    "medical_history": "Diabetes, Hypertension",
+    "social_history": "Non-smoker, occasional drinker",
+    "family_history": "Father: Heart disease, Mother: Asthma",
+    "ehr_name": "Epic"
+  }'
