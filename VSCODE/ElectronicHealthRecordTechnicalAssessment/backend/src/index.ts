@@ -5,6 +5,7 @@ import express from "express"; // Web framework for handling HTTP requests
 import mysql from "mysql2/promise"; // MySQL client supporting async/await
 import auditLogRoutes from "./api/routes/auditLogs"; // Routes for audit log operations
 import patientRoutes from "./api/routes/patientRoutes"; // Routes for audit log operations
+import ehrMappingRoutes from "./api/routes/ehrMappingRoutes"; // Routes for audit log operations
 
 
 // Load environment variables from the .env file located at the project root
@@ -92,6 +93,7 @@ async function startServer() {
     // Mount audit log routes under the `/api` prefix
     app.use("/api", auditLogRoutes);
     app.use("/api/patients", patientRoutes);
+    app.use("/ehrmappings", ehrMappingRoutes);
     
 
     // Define the port number for the Express server (from .env or default to 3000)
