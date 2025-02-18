@@ -15,6 +15,11 @@ import AuditLogService from "../services/AuditLogService";
 export class AuditLogController {
   
   /**
+   * curl --request POST \
+  --url http://localhost:3000/api/audit-logs \
+  --header 'Content-Type: application/json' \
+  --data '{            "user_id": "1",            "ehr_mapping_id": "1",            "action": "1",            "changes": { "field": "1" }          }'
+   * 
    * @method createLog
    * @description Handles the creation of an audit log entry.
    * 

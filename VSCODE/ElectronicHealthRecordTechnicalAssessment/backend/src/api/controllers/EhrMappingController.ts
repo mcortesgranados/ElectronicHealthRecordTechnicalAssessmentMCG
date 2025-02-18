@@ -6,6 +6,17 @@ export class EhrMappingController {
   // Dependency injection of EhrMappingService, which handles the core business logic.
   constructor(private ehrMappingService: EhrMappingService) {}
 
+/**
+ * 
+ * curl --request POST \
+  --url http://localhost:3000/ehrmappings/ehr-mappings \
+  --header 'Content-Type: application/json' \
+  --data '{            "ehr_name": "addfsasfdaafds",            "question_key": "patient_allergy",            "ehr_field": "allergy_list"          }'
+ * 
+ * @param req 
+ * @param res 
+ */
+  
   // The 'create' method is responsible for handling requests to create a new EHR mapping.
   // It acts as a port that the external world (e.g., the web server or client) communicates with.
   // Inside, it calls the 'createEhrMapping' method from the EhrMappingService, which contains the business logic.

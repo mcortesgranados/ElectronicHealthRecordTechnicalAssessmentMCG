@@ -39,6 +39,11 @@ export class PatientController {
   }
 
   /**
+   * curl --request POST \
+  --url http://localhost:3000/patient-response/patient-responses \
+  --header 'Content-Type: application/json' \
+  --data '{     "patient_id": 123,     "ehr_system": "SystemA",     "mapped_data": "{\"field1\":\"value1\", \"field2\":\"value2\"}",     "submitted_at": "2025-02-17T12:00:00Z"   }'
+   * 
    * Handles the HTTP POST request to create a new patient.
    * 
    * @param req - The HTTP request object containing the patient data in the body.
